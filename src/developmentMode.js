@@ -67,35 +67,33 @@ function watchFilesOrDirs(files, callback, chokOptions) {
 
 }
 
-module.exports = function (bootprint, swaggerFile, targetDir) {
+module.exports = function (bootprint, jsonFile, targetDir) {
     var options = bootprint.options;
 
-    // Watch partial templates and swagger file
+    // Watch partial templates and json file
     var htmlDependencies = _.union(
-        _.flatten(_.values(options.partials)),
-        [swaggerFile]
+        options.partials,
+        jsonFile.match(/https?:\/\//) ? [] : [jsonFile]
     );
     watchFilesOrDirs(htmlDependencies, function () {
         // swaggerFile must be read every time, since it is also on the watch-list
-        return qfs.read(swaggerFile).catch(console.log).then(function (swaggerJson) {
-            return bootprint.generateHtml(JSON.parse(swaggerJson), targetDir);
-        });
+        return bootprint.generateHtml();
     });
 
     // Watch less files and include paths
     var lessFiles = _.flatten([
-        options.less.main_files,
+        options.less.main,
         options.less.paths
     ]);
     watchFilesOrDirs(lessFiles, function () {
-        return bootprint.generateCss(targetDir);
+        return bootprint.generateCss();
     });
 
     var liveServer = require("live-server");
 
     var params = {
         port: 8181,
-        host: "0.0.0.0",
+        host: "127.0.0.1",
         root: targetDir,
         noBrowser: true
 

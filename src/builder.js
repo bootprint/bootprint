@@ -1,66 +1,74 @@
 var _ = require("lodash");
-var Converter = require("./bootprint.js");
-var debug = require("debug")("bootprint");
+var Bootprint = require("./bootprint.js");
+var debug = require("debug")("bootprint:builder");
 
-/**
- * Convert an object "key->value" to an object "key->[value]"
- */
-function withArrayValues(obj) {
 
-    if (obj) {
-        // Make sure that partials always contains arrays of paths
-        return _.mapValues(obj, function(value) {
-            return _.isArray(value) ? value : [value];
+
+
+// Function for overriding options as described in the Builder-JSDoc
+function overrideOptions(options, parentOptions) {
+    // Inherit options from parent build or use empty object if not set
+    var copy = _.clone(options, true);
+    if (copy.partials) {
+        copy.partials = _.isArray(copy.partials) ? copy.partials : [copy.partials];
+    }
+    if (!parentOptions) {
+        return copy;
+    }
+    var parentPreprocessor = parentOptions.preprocessor;
+    // The preprocessor must be able to call the parent preprocessor.
+    if (copy.preprocessor) {
+        copy.preprocessor = copy.preprocessor.bind({
+            parent: parentPreprocessor
         });
     }
-    return obj;
+    // Merge without mutating the parentOptions
+    return _.merge({}, parentOptions, copy, function (a, b) {
+        if (_.isArray(a)) {
+            return a.concat(b);
+        }
+    });
 }
+
+
 
 /**
  * Builder for creating a converter with multiple overriding options-objects.
- * @param options
+ * Values of the "options" override values of the parent configuration, if specified.
+ * Array values within "options" are concatenated.
+ * "options.partials" and "options.resources" are always converted to
+ * objects with array-values, because they need to be overridden like arrays.
+ *
+ * @param options new options for this builder.
+ * @param [parentOptions] {Object} a build to inherit options from
  * @constructor
  */
-function Builder(options) {
-    // Initial _options is empty. "this.override" is called at the bottom of the function
-    // "options"-param must not be mutated.
-    // Field visible for test-cases
-    this._options = {};
+function Builder(options, parentOptions) {
+
+    debug("additional options:",options);
+    var _options = overrideOptions(options, parentOptions);
+    debug("merged options:",_options);
+
+    // Accessible for testcases
+    this._options = _options;
 
     /**
-     * Override the values of the current config with another config.
-     * Values of the other configuration override values of the
-     * current configuration, if specified.
-     * Array values of the other configuration are concatenated to
-     * the values of the current config.
-     * @param additionalOptions {object} a plain js object containing configuration values.
+     * @param options {object} options overriding the options of this builder
+     * @return {Builder} new Builder instance
      */
-    this.override = function (additionalOptions) {
-        var copy = _.clone(additionalOptions,true);
-        copy.partials = withArrayValues(copy.partials);
-        copy.resources = withArrayValues(copy.resources);
-        debug("Adding config: %o", copy);
-        _.merge(this._options, copy, function (a, b) {
-            if (_.isArray(a)) {
-                return a.concat(b);
-            }
-        });
-        return this;
+    this.override = function (options) {
+        return new Builder(options, _options);
     };
-
-    this.override(options);
 
     /**
      * Build the configured converter
      */
-    this.build = function () {
-        debug("Building converter with config: %o", this._options);
-        return new Converter(this._options);
-    }
-
-
+    this.build = function (jsonFile,targetDir) {
+        debug("Building converter with config: %o", _options);
+        return new Bootprint(jsonFile, _options, targetDir);
+    };
 }
 
-module.exports = function (options) {
+module.exports = function(options) {
     return new Builder(options);
 };

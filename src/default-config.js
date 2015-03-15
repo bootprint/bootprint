@@ -1,5 +1,4 @@
 var path = require("path");
-var fs = require("fs");
 var _ = require("lodash");
 
 /**
@@ -8,28 +7,23 @@ var _ = require("lodash");
  * @type {{partials: {object}, template: string, helpers: function[], less: {main_files: string[], paths: string[]}}}
  */
 module.exports = {
-    partials: {
-        "swagger-to-html": path.join(__dirname,"..","templates","partials"),
-        "json-schema": path.join(__dirname,"..","templates","partials-json-schema")
-    },
-    resources: {
-        "swagger-to-html": path.join(__dirname,"..", "resources")
-    },
-    template: require.resolve("../templates/page.hbs"),
+    template: null,
     helpers: require("./handlebars-helper.js"),
     less: {
-        main_files: [
+        main: [
             require.resolve("bootstrap/less/bootstrap.less"),
-            require.resolve("../styles/json-schema.less"),
-            require.resolve("../styles/json-schema-labels.less"),
-            require.resolve("../styles/swagger-to-html.less"),
-            require.resolve("../styles/swagger-to-html-labels.less")
+            require.resolve("../styles/bootprint.less")
         ],
         paths: [
-            path.resolve(__dirname, "..", "node_modules", "bootstrap", "less"),
-            path.resolve(__dirname, "..", "node_modules", "highlight.js", "styles")
+            path.resolve(__dirname, "..", "node_modules", "bootstrap", "less")
         ]
     },
-    preprocessor: require("./preprocessor.js")
+    /**
+     * A preprocessor that may return a modified json before entering the rendering process.
+     * Access the inherited preprocessor is possible via <code>this.previous(json)</code>
+     * @param obj the input object
+     * @return a modified object
+     */
+    preprocessor: function(obj) { return obj; }
 };
 

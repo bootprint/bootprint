@@ -1,4 +1,4 @@
-var loadPartials = require("../src/read-partials.js");
+var loadPartials = require("../src/load-partials.js");
 var path = require("path");
 var deep = require("q-deep");
 

@@ -1,16 +1,14 @@
 {
-  "name": "swagger-to-html",
-  "version": "0.3.0",
-  "description": "Converts a swagger-definition into a static html page",
-  "main": "src/swagger-to-html.js",
+  "name": "bootprint",
+  "version": "0.1.0",
+  "description": "Converts json into a static html page und Handlebars and Bootstrap",
+  "main": "index.js",
   "bin": {
-    "swagger-to-html": "bin/cli.js"
+    "bootprint": "bin/cli.js"
   },
   "scripts": {
-    "start": "bin/cli.js -d example/petstore.json target/",
     "test": "nodeunit tests/"
   },
-  "preferGlobal": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/nknapp/swagger-to-html.git"
