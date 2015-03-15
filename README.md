@@ -67,6 +67,10 @@ Although I haven't done that yet, it should not be too hard to include such a ca
 ```
 
 
+## Development mode
+
+File watcher and live-reload server can be started using the "-d" option of the command-line utility.
+
 ## Writing your own template-modules
 
 
