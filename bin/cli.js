@@ -5,6 +5,7 @@ var program = require("commander");
 var Q = require("q");
 var debug = require("debug")("bootprint");
 var path = require("path");
+var BootprintBuilder = require("../src/BootprintBuilder.js");
 
 // CLI builder module. Generates a function that executed a preconfigured bootprint
 
@@ -31,12 +32,12 @@ if (configFile) {
 
 options.developmentMode = program["developmentMode"];
 
-var builder = require("../index.js");
+var builder = new BootprintBuilder();
 var bootprint = require("bootprint-" + spec)(builder)
     .merge(options)
     .build(jsonFile, targetDir);
 
-Q.all([bootprint.generateHtml(), bootprint.generateCss()]).then(function () {
+bootprint.generate().then(function () {
     if (options.developmentMode) {
         require("../src/developmentMode.js")(bootprint, jsonFile, targetDir);
     }

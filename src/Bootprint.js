@@ -7,7 +7,7 @@ var less = require("less");
 var _ = require("lodash");
 var deep = require("q-deep");
 var debug = require("debug")("bootprint");
-var loadPartials = require("./load-partials.js");
+var loadPartials = require("./readPartials.js");
 
 
 function loadFromFileOrHttp(fileOrUrl) {
@@ -18,7 +18,12 @@ function loadFromFileOrHttp(fileOrUrl) {
     }
 }
 
-
+/**
+ * This class is the programmatic interface to building HTML from the json
+ * file. A pre-configured instance of this class can be obtained from
+ * the <code>Builder</code>
+ * @class
+ */
 function Bootprint(jsonFile, options, targetDir) {
 
     debug("Creating Bootprint", jsonFile, options, targetDir);
@@ -26,8 +31,10 @@ function Bootprint(jsonFile, options, targetDir) {
     this.options = options;
 
     /**
-     * Generate html-output and store the result into the index.html-file in the specified target directory
-     * @returns {*}
+     * Generates html-output and store the result into the index.html-file
+     * in the specified target directory.
+     * @returns {Promise} a promise that resolves to the index.html-file
+     * when all content is generated and stored.
      */
     this.generateHtml = function () {
         debug("Generating HTML from %s", options.template);
@@ -76,8 +83,9 @@ function Bootprint(jsonFile, options, targetDir) {
     };
 
     /**
-     * Generate css, with optional additional theme-less-file. From bootstrap less and atom-light-syntax less
-     * @returns {*}
+     * Generates the CSS from all configured less-files.
+     * @returns {Promise} a promise that is resolved to the target css-file when
+     *   the CSS-compilation is finished.
      */
     this.generateCss = function () {
         debug("Generating CSS");
@@ -103,6 +111,12 @@ function Bootprint(jsonFile, options, targetDir) {
         });
     };
 
+    /**
+     * Perform the complete build (i.e. {@link Bootprint#generateCss()}
+     * and {@link Bootprint#generateHtml()})
+     * @returns {Promise} a promise that is resolved to an array when both tasks are complete.
+     * The array contains the path to "index.html" at index 0 and the "main.css" at index 1.
+     */
     this.generate = function() {
         debug("Generating HTML and CSS");
         return Q.all([this.generateHtml(),this.generateCss()]);
