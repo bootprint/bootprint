@@ -49,16 +49,28 @@ var bootprint = require("bootprint")
 bootprint.generate().done(console.log);
 ```
 
-More examples can be found in the [bootprint-examples]
+More examples can be found in the [bootprint-examples](https://github.com/nknapp/bootprint-examples) repository.
 
+Although I haven't done that yet, it should not be too hard to include such a call in a custom Grunt-task.
+
+### API-Reference
+
+*TODO*
 
 
 ## Configuration
 
-*Coming soon*
+```js
+{
+ TODO
+}
+```
+
 
 ## Writing your own template-modules
 
 
-*See [bootprint-json-schema](http://github.com/nknapp/bootprint-json-schema)*
+*See [bootprint-json-schema](http://github.com/nknapp/bootprint-json-schema) for an example. More documentation should come soon.
+
+
 
