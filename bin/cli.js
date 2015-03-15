@@ -33,7 +33,7 @@ options.developmentMode = program["developmentMode"];
 
 var builder = require("../index.js");
 var bootprint = require("bootprint-" + spec)(builder)
-    .override(options)
+    .merge(options)
     .build(jsonFile, targetDir);
 
 Q.all([bootprint.generateHtml(), bootprint.generateCss()]).then(function () {

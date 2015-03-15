@@ -2,7 +2,7 @@
 
 ![Bootprint logo](http://nknapp.github.io/bootprint/img/bootprint.svg)
 
-`bootprint` is a tool for converting JSON-files into static HTML-pages using [{less}](http://lesscss.org),
+`Bootprint` is a tool for converting JSON-files into static HTML-pages using [{less}](http://lesscss.org),
 [Bootstrap](http://getbootstrap.com) and [Handlebars](http://handlebarsjs.com).
 
 It is designed with flexibility in mind:
@@ -38,5 +38,5 @@ form of the [Core/Validation Meta-Schema](http://json-schema.org).
 
 ## Writing your own template-modules
 
-*See [bootprint-json-schema](http://github.com/nknapp/bootprint-json-schema)
+*See [bootprint-json-schema](http://github.com/nknapp/bootprint-json-schema)*
 

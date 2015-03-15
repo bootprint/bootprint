@@ -53,11 +53,23 @@ function Builder(options, parentOptions) {
     this._options = _options;
 
     /**
-     * @param options {object} options overriding the options of this builder
+     * @param options {object|Builder} options overriding the options of this builder
      * @return {Builder} new Builder instance
      */
-    this.override = function (options) {
+    this.merge = function (options) {
         return new Builder(options, _options);
+    };
+
+    /**
+     * Inherit configuration options from another module.
+     * `require("bootprint-modulename")` should return a function(builder)
+     * and this functions needs to be passed in here.
+     * A new Builder with will be returned that overrides the current options
+     * with options from the builderFunction's result.
+     * @param builderFunction
+     */
+    this.load = function(builderFunction) {
+        return builderFunction(this);
     };
 
     /**
