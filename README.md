@@ -32,7 +32,7 @@ form of the [Core/Validation Meta-Schema](http://json-schema.org).
 
 *Coming soon*
 
-## Advanced configuration
+## Configuration
 
 *Coming soon*
 
