@@ -103,6 +103,10 @@ function Bootprint(jsonFile, options, targetDir) {
         });
     };
 
+    this.generate = function() {
+        debug("Generating HTML and CSS");
+        return Q.all([this.generateHtml(),this.generateCss()]);
+    }
 }
 
 module.exports = Bootprint;
