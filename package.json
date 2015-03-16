@@ -1,7 +1,7 @@
 {
   "name": "bootprint",
   "version": "0.3.0",
-  "description": "Converts json into a static html page und Handlebars and Bootstrap",
+  "description": "Converts json into a static html page using Handlebars and Bootstrap",
   "main": "index.js",
   "bin": {
     "bootprint": "bin/cli.js"
