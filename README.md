@@ -151,7 +151,7 @@ API-documentation automatically based on this convention.
   * Use the `{{!@readonly}}`-comment to the beinning of partials  that should 
     not be modified or overridden by another module.
 
-  Example: `before-body.jbs`
+  Example: `before-body.hbs`
   
   ```hbs
   {{!@public}}{{!This partial can be overridden in order to add custom content in before the existing content}}
@@ -162,7 +162,8 @@ API-documentation automatically based on this convention.
 
 
 
-*See [bootprint-json-schema](http://github.com/nknapp/bootprint-json-schema) for an example, although it does not follow of the above rules yet.
+*See [bootprint-json-schema](http://github.com/nknapp/bootprint-json-schema) for an example, although it does not follow of the above rules yet.*
+*For a module extending another bootprint-module, see [bootprint-swager](http://github.com/nknapp/bootprint-swagger).*
 
 
 
