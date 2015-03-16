@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nknapp/swagger-to-html.git"
+    "url": "https://github.com/nknapp/bootprint.git"
   },
   "author": "Nils Knappmeier",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nknapp/swagger-to-html/issues"
+    "url": "https://github.com/nknapp/bootprint/issues"
   },
-  "homepage": "https://github.com/nknapp/swagger-to-html",
+  "homepage": "https://github.com/nknapp/bootprint",
   "dependencies": {
     "cheerio": "^0.18.0",
     "chokidar": "^1.0.0-rc4",
