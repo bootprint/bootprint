@@ -163,7 +163,7 @@ API-documentation automatically based on this convention.
 
 
 *See [bootprint-json-schema](http://github.com/nknapp/bootprint-json-schema) for an example, although it does not follow of the above rules yet.*
-*For a module extending another bootprint-module, see [bootprint-swager](http://github.com/nknapp/bootprint-swagger).*
+*For a module extending another bootprint-module, see [bootprint-swagger](http://github.com/nknapp/bootprint-swagger).*
 
 
 
