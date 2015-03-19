@@ -28,9 +28,6 @@ bootprint json-schema http://json-schema.org/schema target
 The directory "target" should now contain a file `index.html` and `main.css` which contain a readble
 form of the [Core/Validation Meta-Schema](http://json-schema.org).
 
-*There seems to be a bug that sometimes causes the above example not to work (response 302). Just try it multiple time, if that's the case.
-I haven't looked into it yet.*
-
 ## Programmatic usage
 
 In order to access `bootprint` through node, you have to have the `bootprint`-module installed locally.
