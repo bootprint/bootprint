@@ -1,6 +1,5 @@
 var Handlebars = require('handlebars');
 var qfs = require("q-io/fs");
-var qhttp = require("q-io/http");
 var Q = require("q");
 var path = require("path");
 var less = require("less");
@@ -8,11 +7,19 @@ var _ = require("lodash");
 var deep = require("q-deep");
 var debug = require("debug")("bootprint");
 var loadPartials = require("./readPartials.js");
-
+var request = require('request');
 
 function loadFromFileOrHttp(fileOrUrl) {
     if (fileOrUrl.match(/^https?:\/\//)) {
-        return qhttp.read(fileOrUrl);
+        // Use the "request" package to download data
+        return Q.nfcall(request, fileOrUrl).spread(function (response) {
+            if (response.statusCode !== 200) {
+                var error = new Error("HTTP request failed with code " + response.statusCode);
+                error.response = response;
+                throw error;
+            }
+            return response.body;
+        });
     } else {
         return qfs.read(fileOrUrl);
     }
@@ -117,9 +124,9 @@ function Bootprint(jsonFile, options, targetDir) {
      * @returns {Promise} a promise that is resolved to an array when both tasks are complete.
      * The array contains the path to "index.html" at index 0 and the "main.css" at index 1.
      */
-    this.generate = function() {
+    this.generate = function () {
         debug("Generating HTML and CSS");
-        return Q.all([this.generateHtml(),this.generateCss()]);
+        return Q.all([this.generateHtml(), this.generateCss()]);
     }
 }
 
