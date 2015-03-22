@@ -48,12 +48,6 @@ function BootprintBuilder(options, parentOptions) {
     };
 }
 
-module.exports = BootprintBuilder;
-
-
-
-
-
 // Function for overriding options as described in the Builder-JSDoc
 function overrideOptions(options, parentOptions) {
     // Inherit options from parent build or use empty object if not set
@@ -78,3 +72,6 @@ function overrideOptions(options, parentOptions) {
         }
     });
 }
+
+module.exports = BootprintBuilder;
+

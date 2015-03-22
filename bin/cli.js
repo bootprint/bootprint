@@ -14,12 +14,18 @@ program.version(require("./../package").version)
     .description(require("./../package").description)
     .option('-f, --config-file <file>', 'Specify a config file for custom configurations')
     .option('-d, --development-mode', 'Turn on file-watcher, less source maps and http-server with live-reload')
+    .option('-l, --long-stack','Turn on long and clarified stack-traces')
     .parse(process.argv);
 
 if (program.args.length < 2) {
     program.help();
 }
 
+if (program["longStack"]) {
+    Error.stackTraceLimit = 100;
+    require("trace");
+    require("clarify");
+}
 var configFile = program['configFile'];
 
 var spec = program.args[0];
@@ -31,6 +37,7 @@ if (configFile) {
 }
 
 options.developmentMode = program["developmentMode"];
+
 
 var builder = new BootprintBuilder();
 var bootprint = require("bootprint-" + spec)(builder)

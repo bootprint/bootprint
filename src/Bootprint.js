@@ -5,25 +5,10 @@ var path = require("path");
 var less = require("less");
 var _ = require("lodash");
 var deep = require("q-deep");
-var debug = require("debug")("bootprint");
+var debug = require("debug")("bootprint:core");
 var loadPartials = require("./readPartials.js");
 var request = require('request');
 
-function loadFromFileOrHttp(fileOrUrl) {
-    if (fileOrUrl.match(/^https?:\/\//)) {
-        // Use the "request" package to download data
-        return Q.nfcall(request, fileOrUrl).spread(function (response) {
-            if (response.statusCode !== 200) {
-                var error = new Error("HTTP request failed with code " + response.statusCode);
-                error.response = response;
-                throw error;
-            }
-            return response.body;
-        });
-    } else {
-        return qfs.read(fileOrUrl);
-    }
-}
 
 /**
  * This class is the programmatic interface to building HTML from the json
@@ -33,6 +18,24 @@ function loadFromFileOrHttp(fileOrUrl) {
  */
 function Bootprint(jsonFile, options, targetDir) {
 
+
+
+    function loadFromFileOrHttp(fileOrUrl) {
+            if (fileOrUrl.match(/^https?:\/\//)) {
+            // Use the "request" package to download data
+            return Q.nfcall(request, fileOrUrl).spread(function (response) {
+                if (response.statusCode !== 200) {
+                    var error = new Error("HTTP request failed with code " + response.statusCode);
+                    error.response = response;
+                    throw error;
+                }
+                return response.body;
+            });
+        } else {
+            return qfs.read(fileOrUrl);
+        }
+    }
+    
     debug("Creating Bootprint", jsonFile, options, targetDir);
     // Visible field with actual options needed by developmentMode
     this.options = options;
@@ -61,7 +64,7 @@ function Bootprint(jsonFile, options, targetDir) {
             hbs.logger.level = 0;
             hbs.registerHelper(options.helpers);
             debug("Handlebars helpers registered");
-            debug("Registering partials", partials);
+            debug("Registering partials");
             hbs.registerPartial(partials);
             debug("Partials registered");
             return hbs
@@ -70,7 +73,7 @@ function Bootprint(jsonFile, options, targetDir) {
         // When all is ready, do the work
         return Q.all([pageTemplateP, handleBarsP, jsonP, targetDirP])
             .spread(function (pageTemplateContents, HtmlHandlebars, json) {
-                debug("compiling pageTemplate");
+                debug("compiling pageTemplate",pageTemplateContents);
                 try {
 
                     var pageTemplate = HtmlHandlebars.compile(pageTemplateContents, {
