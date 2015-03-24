@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "clarify": "^1.0.5",
+    "grunt-jsdoc-to-markdown": "^0.4.3",
     "nodeunit": "^0.9.1",
     "trace": "^1.1.0"
   }

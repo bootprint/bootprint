@@ -20,7 +20,7 @@ function BootprintBuilder(options, parentOptions) {
     this._options = _options;
 
     /**
-     * @param options {object|BootprintBuilder} options overriding the options of this builder
+     * @param {object} options options overriding the options of this builder
      * @return {BootprintBuilder} new Builder instance
      */
     this.merge = function (options) {
@@ -40,7 +40,8 @@ function BootprintBuilder(options, parentOptions) {
     };
 
     /**
-     * Build the configured converter
+     * Build the configured Bootprint
+     * @return {Bootprint} a Bootprint-instance
      */
     this.build = function (jsonFile,targetDir) {
         debug("Building converter with config: %o", _options);

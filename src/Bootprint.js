@@ -13,8 +13,9 @@ var request = require('request');
 /**
  * This class is the programmatic interface to building HTML from the json
  * file. A pre-configured instance of this class can be obtained from
- * the <code>Builder</code>
+ * the [BootprintBuilder](#BootprintBuilder) (i.e. via `require('bootprint')`)
  * @class
+ * @see BootprintBuilder
  */
 function Bootprint(jsonFile, options, targetDir) {
 
