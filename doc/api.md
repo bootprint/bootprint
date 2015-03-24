@@ -27,7 +27,7 @@
 ##new Bootprint()
 This class is the programmatic interface to building HTML from the json
 file. A pre-configured instance of this class can be obtained from
-the [BootprintBuilder](#Bootprint) (i.e. via `require('bootprint')`)
+the [BootprintBuilder](#BootprintBuilder) (i.e. via `require('bootprint')`)
 
 <a name="Bootprint#generateHtml"></a>
 ##bootprint.generateHtml()
