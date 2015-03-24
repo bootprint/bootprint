@@ -11,7 +11,7 @@
   * [new BootprintBuilder(options, [parentOptions])](#new_BootprintBuilder)
   * [bootprintBuilder.merge(options)](#BootprintBuilder#merge)
   * [bootprintBuilder.load(builderFunction)](#BootprintBuilder#load)
-  * [bootprintBuilder.build()](#BootprintBuilder#build)
+  * [bootprintBuilder.build(jsonFile, targetDir)](#BootprintBuilder#build)
  
 <a name="Bootprint"></a>
 #class: Bootprint
@@ -57,12 +57,17 @@ The array contains the path to "index.html" at index 0 and the "main.css" at ind
   * [new BootprintBuilder(options, [parentOptions])](#new_BootprintBuilder)
   * [bootprintBuilder.merge(options)](#BootprintBuilder#merge)
   * [bootprintBuilder.load(builderFunction)](#BootprintBuilder#load)
-  * [bootprintBuilder.build()](#BootprintBuilder#build)
+  * [bootprintBuilder.build(jsonFile, targetDir)](#BootprintBuilder#build)
 
 <a name="new_BootprintBuilder"></a>
 ##new BootprintBuilder(options, [parentOptions])
 This class is responsible for storing and adapting configuration options
-for the <code>Bootprint</code> object.
+for the [Bootprint](#Bootprint) object. The constructor is not
+accessible outside the module. An instance of this class can be obtainted
+via `require("bootprint")`. Configurations can be changed using
+[merge({...})](#BootprintBuilder#merge) and [load(require("bootprint-module"))](#BootprintBuilder#load)
+
+This class is immutable. All functions return new instances rather than mutating the current instance.
 
 **Params**
 
@@ -71,6 +76,9 @@ for the <code>Bootprint</code> object.
 
 <a name="BootprintBuilder#merge"></a>
 ##bootprintBuilder.merge(options)
+Creates a new instance of BootprintBuilder. The options of the current BootprintBuilder
+are used as default values and are overridden by the options provided as parameter.
+
 **Params**
 
 - options `object` - options overriding the options of this builder  
@@ -79,17 +87,24 @@ for the <code>Bootprint</code> object.
 <a name="BootprintBuilder#load"></a>
 ##bootprintBuilder.load(builderFunction)
 Inherit configuration options from another module.
-`require("bootprint-modulename")` should return a function(builder)
+`require("bootprint-modulename")` usually return a function(builder)
 and this functions needs to be passed in here.
-A new Builder with will be returned that overrides the current options
+A new BootprintBuilder will be returned that overrides the current options
 with options from the builderFunction's result.
 
 **Params**
 
-- builderFunction   
+- builderFunction `function` - that receives a BootprintBuilder as paramater
+ and returns a BootprintBuilder with changed configuration.  
 
+**Returns**: [BootprintBuilder](#BootprintBuilder) - the result of the builderFunction  
 <a name="BootprintBuilder#build"></a>
-##bootprintBuilder.build()
-Build the configured Bootprint
+##bootprintBuilder.build(jsonFile, targetDir)
+Build the configured Bootprint-instance.
+
+**Params**
+
+- jsonFile `string` - path the a file containing the data to pass into the template  
+- targetDir `string` - path to a directory where the HTML and CSS file should be created  
 
 **Returns**: [Bootprint](#Bootprint) - a Bootprint-instance  

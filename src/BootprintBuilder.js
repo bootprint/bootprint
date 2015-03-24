@@ -4,7 +4,12 @@ var debug = require("debug")("bootprint:builder");
 
 /**
  * This class is responsible for storing and adapting configuration options
- * for the <code>Bootprint</code> object.
+ * for the [Bootprint](#Bootprint) object. The constructor is not
+ * accessible outside the module. An instance of this class can be obtainted
+ * via `require("bootprint")`. Configurations can be changed using
+ * [merge({...})](#BootprintBuilder#merge) and [load(require("bootprint-module"))](#BootprintBuilder#load)
+ *
+ * This class is immutable. All functions return new instances rather than mutating the current instance.
  *
  * @param {object} options new options for this builder.
  * @param {object} [parentOptions] a build to inherit options from
@@ -20,6 +25,8 @@ function BootprintBuilder(options, parentOptions) {
     this._options = _options;
 
     /**
+     * Creates a new instance of BootprintBuilder. The options of the current BootprintBuilder
+     * are used as default values and are overridden by the options provided as parameter.
      * @param {object} options options overriding the options of this builder
      * @return {BootprintBuilder} new Builder instance
      */
@@ -29,18 +36,22 @@ function BootprintBuilder(options, parentOptions) {
 
     /**
      * Inherit configuration options from another module.
-     * `require("bootprint-modulename")` should return a function(builder)
+     * `require("bootprint-modulename")` usually return a function(builder)
      * and this functions needs to be passed in here.
-     * A new Builder with will be returned that overrides the current options
+     * A new BootprintBuilder will be returned that overrides the current options
      * with options from the builderFunction's result.
-     * @param builderFunction
+     * @param builderFunction {function} that receives a BootprintBuilder as paramater
+     *  and returns a BootprintBuilder with changed configuration.
+     * @return {BootprintBuilder} the result of the builderFunction
      */
     this.load = function(builderFunction) {
         return builderFunction(this);
     };
 
     /**
-     * Build the configured Bootprint
+     * Build the configured Bootprint-instance.
+     * @param {string} jsonFile path the a file containing the data to pass into the template
+     * @param {string} targetDir path to a directory where the HTML and CSS file should be created
      * @return {Bootprint} a Bootprint-instance
      */
     this.build = function (jsonFile,targetDir) {
