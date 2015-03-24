@@ -63,7 +63,7 @@ The array contains the path to "index.html" at index 0 and the "main.css" at ind
 ##new BootprintBuilder(options, [parentOptions])
 This class is responsible for storing and adapting configuration options
 for the [Bootprint](#Bootprint) object. The constructor is not
-accessible outside the module. An instance of this class can be obtainted
+accessible outside the module. An instance of this class can be obtained
 via `require("bootprint")`. Configurations can be changed using
 [merge({...})](#BootprintBuilder#merge) and [load(require("bootprint-module"))](#BootprintBuilder#load)
 
