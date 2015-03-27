@@ -13,7 +13,8 @@ module.exports = {
     },
     "less": {
         "main": [
-            "path/to/a/less/file.less", "path/to/another/less/file.less"
+            "path/to/a/less/file.less",
+            "path/to/another/less/file.less"
         ],
         "paths": [
             "a/less/include/path"
