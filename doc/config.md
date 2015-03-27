@@ -70,7 +70,7 @@ TODO
 Helpers are called with one more parameter than usual in Handlebars. The additional
 parameter is an object `obj`:
 
-* **obj.engine** containstThe active Handlebars engine
+* **obj.engine** contains the active Handlebars engine
 
 ## Preprocessor
 
