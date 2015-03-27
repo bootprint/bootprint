@@ -6,20 +6,20 @@ The configuration file is a JavaScript file of the following form:
 
 ```js
 module.exports = {
- "partials": "/path/to/a/partial-directory",
- "template": "/path/To/a/template"
- "helpers": {
-    "handlebarsHelper": function(value) { ... }
- },
- "less": {
-     "main": [
-        "path/to/a/less/file.less", "path/to/another/less/file.less
-     ],
-     "paths": [
-        "a/less/include/path"
-     ]
- },
- "preprocessor": function(html) { ... }
+    "partials": "/path/to/a/partial-directory",
+    "template": "/path/To/a/template"
+    "helpers": {
+        "handlebarsHelper": function(value) { ... }
+    },
+    "less": {
+        "main": [
+            "path/to/a/less/file.less", "path/to/another/less/file.less"
+        ],
+        "paths": [
+            "a/less/include/path"
+        ]
+    },
+    "preprocessor": function(html) { ... }
 }
 ```
 
