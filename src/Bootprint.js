@@ -63,7 +63,13 @@ function Bootprint(jsonFile, options, targetDir) {
             var hbs = Handlebars.create();
             debug("Handlbars instance created");
             hbs.logger.level = 0;
-            hbs.registerHelper(options.helpers);
+            // Provide the engine as last parameter to all helpers in order to
+            // enable things like calling partials from a helper.
+            hbs.registerHelper(_.mapValues(options.helpers, function(helper) {
+                return _.partialRight(helper, {
+                    engine: hbs
+                });
+            }));
             debug("Handlebars helpers registered");
             debug("Registering partials");
             hbs.registerPartial(partials);
