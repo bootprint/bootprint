@@ -7,7 +7,7 @@ The configuration file is a JavaScript file of the following form:
 ```js
 module.exports = {
     "partials": "/path/to/a/partial-directory",
-    "template": "/path/To/a/template"
+    "template": "/path/To/a/template",
     "helpers": {
         "handlebarsHelper": function(value) { ... }
     },
