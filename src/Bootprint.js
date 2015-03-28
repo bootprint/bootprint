@@ -67,7 +67,8 @@ function Bootprint(jsonFile, options, targetDir) {
             // enable things like calling partials from a helper.
             hbs.registerHelper(_.mapValues(options.helpers, function(helper) {
                 return _.partialRight(helper, {
-                    engine: hbs
+                    engine: hbs,
+                    config: options
                 });
             }));
             debug("Handlebars helpers registered");
