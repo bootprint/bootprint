@@ -2,6 +2,12 @@ var _ = require("lodash");
 var Bootprint = require("./Bootprint.js");
 var debug = require("debug")("bootprint:builder");
 
+var jsonschema = require('jsonschema');
+var extra = require('jsonschema-extra');
+
+var validator = new (jsonschema.Validator)();
+extra(validator);
+
 /**
  * This class is responsible for storing and adapting configuration options
  * for the [Bootprint](#Bootprint) object. The constructor is not
@@ -17,9 +23,16 @@ var debug = require("debug")("bootprint:builder");
  */
 function BootprintBuilder(options, parentOptions) {
 
-    debug("additional options:",options);
+    debug("additional options:", options);
+    var validationErrors = validator.validate(options, require("./configSchema")).errors;
+    if (validationErrors.length > 0) {
+        console.error("Error while validating config",options);
+        console.error("Errors: ",validationErrors.map(String).join("\n"));
+        throw new Error("Error while validating options-object",validationErrors);
+    }
+    require("assert")(validationErrors.length === 0, "Error: " + validationErrors);
     var _options = overrideOptions(options || {}, parentOptions);
-    debug("merged options:",_options);
+    debug("merged options:", _options);
 
     // Accessible for testcases
     this._options = _options;
@@ -44,7 +57,7 @@ function BootprintBuilder(options, parentOptions) {
      *  and returns a BootprintBuilder with changed configuration.
      * @return {BootprintBuilder} the result of the builderFunction
      */
-    this.load = function(builderFunction) {
+    this.load = function (builderFunction) {
         return builderFunction(this);
     };
 
@@ -54,7 +67,7 @@ function BootprintBuilder(options, parentOptions) {
      * @param {string} targetDir path to a directory where the HTML and CSS file should be created
      * @return {Bootprint} a Bootprint-instance
      */
-    this.build = function (jsonFile,targetDir) {
+    this.build = function (jsonFile, targetDir) {
         debug("Building converter with config: %o", _options);
         return new Bootprint(jsonFile, _options, targetDir);
     };

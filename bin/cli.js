@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-
 var program = require("commander");
 var Q = require("q");
 var debug = require("debug")("bootprint");
@@ -14,7 +13,7 @@ program.version(require("./../package").version)
     .description(require("./../package").description)
     .option('-f, --config-file <file>', 'Specify a config file for custom configurations')
     .option('-d, --development-mode', 'Turn on file-watcher, less source maps and http-server with live-reload')
-    .option('-l, --long-stack','Turn on long and clarified stack-traces')
+    .option('-l, --long-stack', 'Turn on long and clarified stack-traces')
     .parse(process.argv);
 
 if (program.args.length < 2) {
@@ -36,13 +35,19 @@ if (configFile) {
     options = require(path.resolve(configFile));
 }
 
-options.developmentMode = program["developmentMode"];
+if (program["developmentMode"]) {
+    options.developmentMode = true
+}
 
-
-var builder = new BootprintBuilder();
-var bootprint = require("bootprint-" + spec)(builder)
-    .merge(options)
-    .build(jsonFile, targetDir);
+try {
+    var builder = new BootprintBuilder();
+    var bootprint = require("bootprint-" + spec)(builder)
+        .merge(options)
+        .build(jsonFile, targetDir);
+} catch(e) {
+    console.error(e);
+    process.exit(0);
+}
 
 bootprint.generate().then(function () {
     if (options.developmentMode) {

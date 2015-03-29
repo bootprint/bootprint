@@ -26,6 +26,8 @@
     "debug": "^2.1.2",
     "handlebars": "^3.0.0",
     "json-stable-stringify": "^1.0.0",
+    "jsonschema": "^1.0.1",
+    "jsonschema-extra": "^1.2.0",
     "less": "^2.4.0",
     "live-server": "^0.7.0",
     "lodash": "^3.3.1",
