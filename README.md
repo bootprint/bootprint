@@ -19,6 +19,7 @@ It is designed with flexibility in mind:
 * **[JavaScript API](doc/jsapi.md)** - How to call Bootprint from JavaScript.
 * **[Configuration Options](doc/config.md)** - How to customize Bootprint for your own purposes.
 * **[Developing modules](doc/modules.md)** - How to create your own modules for bootprint
+* **[Release Notes](doc/releases.md)**
 
 ## Available modules
 
