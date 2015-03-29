@@ -64,7 +64,7 @@ In the bootprint-configuration, you can provide a directory containing partials,
 ```js
 module.exports = {
     // Use "require.resolve" to ensure the correct absolute path to the directory.
-    "partials": require.resolve("./partials")
+    "partials": require('path').join(__dirname,"./partials")
 }
 
 ```
