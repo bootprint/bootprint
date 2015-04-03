@@ -1,8 +1,8 @@
-var builder = require("../src/bootprint-builder.js");
+var builder = require("../lib/bootprint-builder.js");
 
 var jsonschema = require('jsonschema');
 var extra = require('jsonschema-extra');
-var schema = require("../src/config-schema.js");
+var schema = require("../lib/config-schema.js");
 
 var validator = new (jsonschema.Validator)();
 extra(validator);
