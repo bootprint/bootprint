@@ -2,7 +2,7 @@
 
 var program = require("commander");
 var path = require("path");
-var BootprintBuilder = require("./lib/BootprintBuilder.js");
+var BootprintBuilder = require("./lib/bootprint-builder.js");
 var _package = require("./package");
 
 program.version(_package.version)
@@ -38,7 +38,7 @@ try {
 // Generate HTML and CSS
 bootprint.generate().then(function () {
     if (options.developmentMode) {
-        require("../src/developmentMode.js")(bootprint, jsonFile, targetDir);
+        require("../src/development-mode.js")(bootprint, jsonFile, targetDir);
     }
 }).done(function () {
     console.log("done");

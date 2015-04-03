@@ -4,7 +4,7 @@ var assert = require("assert");
 module.exports.testBuilder = function (test) {
     test.expect(4);
     var initialValue = {"c": 3};
-    var BootprintBuilder = require("../src/BootprintBuilder.js");
+    var BootprintBuilder = require("../src/bootprint-builder.js");
     var builder = new BootprintBuilder(initialValue);
 
     builder = builder.merge({a: 1});
@@ -23,7 +23,7 @@ module.exports.testBuilder = function (test) {
 
 module.exports.testExtendPartialsDef = function (test) {
 
-    var BootprintBuilder = require("../src/BootprintBuilder.js");
+    var BootprintBuilder = require("../src/bootprint-builder.js");
     var builder = new BootprintBuilder();
 
     builder = builder.merge({

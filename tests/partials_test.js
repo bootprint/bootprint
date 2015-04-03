@@ -1,4 +1,4 @@
-var loadPartials = require("../src/readPartials.js");
+var loadPartials = require("../src/read-partials.js");
 var path = require("path");
 var deep = require("q-deep");
 
@@ -16,7 +16,7 @@ module.exports.testPartials = function (test) {
                 'eins': 'Eins',
                 'zwei': 'Two',
                 'drei': 'Three',
-                'vier': 'Vier',
+                'vier': 'Vier'
             }
         );
         test.done();

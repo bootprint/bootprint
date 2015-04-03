@@ -1,4 +1,4 @@
-var BootprintBuilder = require("./lib/BootprintBuilder");
+var BootprintBuilder = require("./lib/bootprint-builder");
 
 /**
  * A plain, unconfigured BootprintBuilder

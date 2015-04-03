@@ -1,3 +1,23 @@
+# Writing template-modules
+
+Node-modules like `bootprint-swagger` and `bootprint-json-schema` are called template-modules.
+They provide Handlebars-templates and Less-definitions for convert a specific JSON format
+to readable HTML.
+
+Writing a template module is not much different from [writing a config-file for Bootprint](config.md). 
+The main difference is, that a module can be published on npm and that it can itself be reused and
+adapted.
+
+In order to make it easy for other people to understand and contribute to a template-module, this 
+document proposes a number of conventions. Eventually, there will be a documentation generator for 
+modules that are based on these conventions.
+
+## File system structure
+
+A template-module should contain the following files and directories:
+
+TODO...
+
 
 ## Development mode
 

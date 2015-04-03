@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         jsdoc2md: {
             apidoc: {
-                src: ["src/Bootprint.js", "src/BootprintBuilder.js" ],
+                src: ["lib/bootprint.js", "lib/bootprint-builder.js" ],
                 dest: "doc/api.md"
             }
         }

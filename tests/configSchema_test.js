@@ -1,8 +1,8 @@
-var builder = require("../src/BootprintBuilder.js");
+var builder = require("../src/bootprint-builder.js");
 
 var jsonschema = require('jsonschema');
 var extra = require('jsonschema-extra');
-var schema = require("../src/configSchema.js");
+var schema = require("../src/config-schema.js");
 
 var validator = new (jsonschema.Validator)();
 extra(validator);
@@ -13,7 +13,7 @@ module.exports.testEmptyConfig = function (test) {
         schema);
     test.ok(result.errors.length === 0);
     test.done();
-}
+};
 
 module.exports.testInvalidLessConfig = function (test) {
     var result = validator.validate(
@@ -21,7 +21,7 @@ module.exports.testInvalidLessConfig = function (test) {
         schema);
     test.ok(result.errors.length > 0,"Invalid config must not validate!");
     test.done();
-}
+};
 
 
 module.exports.testInvalidLessConfigWithBuilder = function (test) {
@@ -32,4 +32,4 @@ module.exports.testInvalidLessConfigWithBuilder = function (test) {
         // Invalid schema failed successfully.
     }
     test.done();
-}
+};
