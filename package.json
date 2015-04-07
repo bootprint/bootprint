@@ -1,10 +1,10 @@
 {
   "name": "bootprint",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Converts json into a static html page using Handlebars and Bootstrap",
   "main": "index.js",
   "bin": {
-    "bootprint": "cli.js"
+    "bootprint": "bootprint-cli.js"
   },
   "scripts": {
     "test": "nodeunit tests/"
