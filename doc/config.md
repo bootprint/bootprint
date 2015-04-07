@@ -111,6 +111,22 @@ module.exports = {
 }
 ```
 
+Or you can set the path to a JavaScript-module exporting an object of functions
+
+```js
+// handlebars/helpers.js
+module.exports = {
+   "shout-loud": function(value) {
+       return value.toUpperCase();
+   } 
+}
+
+// configuration file
+module.exports = {
+    "helpers": require.resolve("./handlebars/helpers.js");
+}
+```
+
 If one of your helpers already exists in the module you are using, it replaces the original helper.
 
 Helpers are called with one more parameter than usual in Handlebars. The additional
