@@ -72,8 +72,8 @@ module.exports = function (builder) {
 module.exports.package = require("./package");
 ```                 
 
-For examples, have a look at the existing template-modules (e.g. (bootprint-swagger)[https://github.com/nknapp/bootprint-swagger] and
-its dependents.
+For examples, have a look at the existing template-modules (e.g. [bootprint-swagger](https://github.com/nknapp/bootprint-swagger)
+and its dependencies.
 
 ## Development mode
 
