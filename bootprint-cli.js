@@ -3,6 +3,7 @@
 var program = require("commander");
 var path = require("path");
 var BootprintBuilder = require("./lib/bootprint-builder.js");
+var debug = require("debug")("bootprint:cli");
 var _package = require("./package");
 
 program.version(_package.version)
@@ -31,14 +32,18 @@ try {
         .merge(options)
         .build(jsonFile, targetDir);
 } catch (e) {
-    console.error(e);
+    if (options.developmentMode) {
+        throw e;
+    } else {
+        console.error(e);
+    }
     process.exit(1);
 }
 
 // Generate HTML and CSS
 bootprint.generate().then(function () {
     if (options.developmentMode) {
-        require("../src/development-mode.js")(bootprint, jsonFile, targetDir);
+        require("./lib/development-mode.js")(bootprint, jsonFile, targetDir);
     }
 }).done(function () {
     console.log("done");
@@ -46,22 +51,24 @@ bootprint.generate().then(function () {
 
 /**
  * Load the template module. Try loading "bootprint-`moduleName`" first. If it does not exist
- * use "`moduleName`" directly as module-name.
+ * treat "moduleName" as path to the module (relative to the current working dir).
  * @param moduleName {string} the name of the module to load
  * @return {function} the builder-function of the loaded module
- * @throws an error if neither `bootprint-moduleName` nor `moduleName` refer to an existing module.
  */
 function requireTemplateModule(moduleName) {
     var templateModul = null;
     try {
         templateModul = require("bootprint-" + moduleName);
+        debug("loaded template-module: ","bootprint-" + moduleName)
     } catch (e) {
         if (e.code === 'MODULE_NOT_FOUND') {
-            templateModul = require(moduleName);
+            templateModul = require(path.resolve(moduleName));
+            debug("loaded template-module: ",moduleName)
         } else {
             throw e;
         }
     }
+    debug("template-module is ",templateModul);
     return templateModul;
 }
 
