@@ -72,40 +72,12 @@ module.exports = function (builder) {
 module.exports.package = require("./package");
 ```                 
 
+For examples, have a look at the existing template-modules (e.g. (bootprint-swagger)[https://github.com/nknapp/bootprint-swagger] and
+its dependents.
+
 ## Development mode
 
 File watcher and live-reload server can be started using the "-d" option of the command-line utility.
-
-## Writing your own Bootprint-modules
-
-There are already a couple of modules and all have a pretty similar structure:
-
-Firstly, you have to define an entry point (usually **index.js**), which is
-also registered as `main` in `package.json`.
-
-The file provides a function to enhance a provided BootprintBuilder. The typical pattern is
-
-```js
-module.exports = function (builder) {
-  return builder
-      // Load any modules that this module directly depends on
-      .load(require("bootprint-base"))
-      // Add custom confiration. Use `require.resolve` to ensure
-      // correct paths.
-      .merge({
-          // Remove keys from this object, if you do not need them
-          "partials": path.join(__dirname, "template/"),
-          "helpers": require.resolve("./src/handlebars-helper.js"),
-          "less": {
-              "main": [
-                  require.resolve("./less/main.less")
-              ]
-          }
-      });
-};
-```
-
-Next, you can add overriding partials, helpers and {less}-files to the module in order to add functions or override others.
 
 ### Avoid name clashes
 
