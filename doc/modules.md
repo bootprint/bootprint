@@ -14,10 +14,63 @@ modules that are based on these conventions.
 
 ## File system structure
 
-A template-module should contain the following files and directories:
+The following structure is a proposal for the structure of a template. It is *not* required 
+that a template-module have this structure, but I think a unified structure helps other people (such
+as yourself in the future) find their way easier. So if you are writing a template module, you should 
+structure it like this:
 
-TODO...
+```
+.
+├── index.js
+├── package.json
+├── LICENSE
+├── handlebars
+│   ├── helpers.js
+│   ├── template.hbs
+│   ├── partials
+│   │   ├── my-module-name
+│   │   │   ├── my-partial.hbs
+│   │   │   └── my-other-partial.hbs
+│   │   └── inherited-module-name
+│   │       ├── overridden-partial.hbs
+│   │       └── other-overriden-partial.hbs
+│   └── template.hbs
+└── less
+    ├── include
+    │   └── included-less-file.less 
+    └── main.less
+```
 
+All parts except `index.js` and `package.json` are optional. All paths must be configured. 
+
+**index.js** contains a bootprint-configuration for these folders. 
+In addition to the configuration, the contents of the `package.json`-file is 
+included in the export:
+  
+```js
+var path = require("path");
+
+// Export function to create new config (builder is passed in from outside)
+module.exports = function (builder) {
+  return builder
+      .load(require("bootprint-inherited-module-name"))
+      .merge({
+          "partials": path.join(__dirname, "handlebars/partials"),
+          "template": require.resolve("./handlebars/template.hbs"),
+          "less": {
+              "main": [
+                  require.resolve("./less/main.less")
+              ],
+              "paths": [
+                  path.join(__dirname,"less/include")
+              ]
+          }
+      });
+};
+
+// Add "package" to be used by bootprint-doc-generator
+module.exports.package = require("./package");
+```                 
 
 ## Development mode
 
@@ -32,25 +85,25 @@ also registered as `main` in `package.json`.
 
 The file provides a function to enhance a provided BootprintBuilder. The typical pattern is
 
-  ```js
-  module.exports = function (builder) {
-      return builder
-          // Load any modules that this module directly depends on
-          .load(require("bootprint-base"))
-          // Add custom confiration. Use `require.resolve` to ensure
-          // correct paths.
-          .merge({
-              // Remove keys from this object, if you do not need them
-              "partials": path.join(__dirname, "template/"),
-              "helpers": require.resolve("./src/handlebars-helper.js"),
-              "less": {
-                  "main": [
-                      require.resolve("./less/main.less")
-                  ]
-              }
-          });
-  };
-  ```
+```js
+module.exports = function (builder) {
+  return builder
+      // Load any modules that this module directly depends on
+      .load(require("bootprint-base"))
+      // Add custom confiration. Use `require.resolve` to ensure
+      // correct paths.
+      .merge({
+          // Remove keys from this object, if you do not need them
+          "partials": path.join(__dirname, "template/"),
+          "helpers": require.resolve("./src/handlebars-helper.js"),
+          "less": {
+              "main": [
+                  require.resolve("./less/main.less")
+              ]
+          }
+      });
+};
+```
 
 Next, you can add overriding partials, helpers and {less}-files to the module in order to add functions or override others.
 
