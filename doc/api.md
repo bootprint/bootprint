@@ -104,7 +104,10 @@ Build the configured Bootprint-instance.
 
 **Params**
 
-- jsonFile `string` - path the a file containing the data to pass into the template  
+- jsonFile `string` - path the a file containing the data to pass into the template,
+          if the file starts with `http://` or `https://` it is assumed to be a URL and the data
+          is downloaded. If the parameter is an object, it is assumed to be the data itself and
+          it is used directly as input for Handlebars.
 - targetDir `string` - path to a directory where the HTML and CSS file should be created  
 
 **Returns**: [Bootprint](#Bootprint) - a Bootprint-instance  
