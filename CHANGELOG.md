@@ -1,6 +1,6 @@
 # Release notes
 
-## Upcoming
+## v0.4.9 - 2015-06-17
 ### Fixed
 
 - `Cannot read property 'bind' of undefined` occuring when running a template-module with preprocessor
