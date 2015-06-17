@@ -11,7 +11,7 @@ npm install --save bootprint-swagger
 var bootprint = require('bootprint')
    .load(require('bootprint-swagger'))
    .merge({ /* Any other configuration */ })
-   .build('http://petstore.swagger.io/v2/swagger.json','target');
+   .build('http://petstore.swagger.io/v2/swagger.json','target')
    .generate()
    .done(console.log);
 ```
