@@ -1,6 +1,6 @@
 # Release notes
 
-## Upcoming
+## v0.4.10 - 2015-06-18
 ### Added
 
 - Output used template-module versions
