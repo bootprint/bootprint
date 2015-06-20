@@ -26,19 +26,10 @@ var options = program['configFile']; // Coerced by commander via fn-parameter
 options.developmentMode = program["developmentMode"];
 
 // Load and configure bootprint
-try {
-    var bootprint = require("./index.js")
-        .load(requireTemplateModule(templateModule))
-        .merge(options)
-        .build(jsonFile, targetDir);
-} catch (e) {
-    if (options.developmentMode) {
-        throw e;
-    } else {
-        console.error(e);
-    }
-    process.exit(1);
-}
+var bootprint = require("./index.js")
+    .load(requireTemplateModule(templateModule))
+    .merge(options)
+    .build(jsonFile, targetDir);
 
 // Generate HTML and CSS
 bootprint.generate().then(function () {
