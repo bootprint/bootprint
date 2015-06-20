@@ -9,6 +9,7 @@
 ### Fixed
 
 - Reduces total extracted size of bootprint by 9 MB, by replacing `request` by `get-promise`
+- Display uncaught exceptions with proper stack-traces
 
 ## v0.4.9 - 2015-06-17
 ### Fixed
