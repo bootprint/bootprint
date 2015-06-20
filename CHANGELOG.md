@@ -5,7 +5,7 @@
 
 - Output used template-module versions
 
-## Upcoming
+## v0.4.11 - 2015-06-20
 ### Fixed
 
 - Reduces total extracted size of bootprint by 9 MB, by replacing `request` by `get-promise`
