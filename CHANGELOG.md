@@ -1,6 +1,6 @@
 # Release notes
 
-## Upcoming
+## v0.4.12 - 2015-06-21
 ### Fixed
 
 - Remove `request` from dependencies
