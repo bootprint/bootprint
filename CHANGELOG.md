@@ -1,6 +1,6 @@
 # Release notes
 
-## Upcoming
+## v0.5.0 - 2015-06-22
 ### Changed
 
 - Preferred path for handlebars options is not in `options.handlebars` (instead of `options`)
