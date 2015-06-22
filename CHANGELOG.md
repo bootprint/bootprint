@@ -1,5 +1,10 @@
 # Release notes
 
+## Upcoming
+### Fixed
+- Fix to support legacy config format.
+  This was broken in 0.5.0  
+
 ## v0.5.0 - 2015-06-22
 ### Changed
 

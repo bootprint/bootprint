@@ -30,14 +30,18 @@ module.exports.testExtendPartialsDef = function (test) {
         partials: 'aDirectory'
     });
     test.deepEqual(builder._options, {
-        // Partials are expanded to arrays
-        partials: ['aDirectory']
+        handlebars: {
+            // Partials are expanded to arrays
+            partials: ['aDirectory']
+        },
     });
     builder = builder.merge({
         partials: 'secondDirectory'
     });
     test.deepEqual(builder._options, {
-        partials: ['aDirectory', 'secondDirectory']
+        handlebars: {
+            partials: ['aDirectory', 'secondDirectory']
+        }
     });
     test.done();
 };
