@@ -7,10 +7,13 @@ The configuration file is a JavaScript file of the following form:
 
 ```js
 module.exports = {
-    "partials": "/path/to/a/partial-directory",
-    "template": "/path/To/a/template",
-    "helpers": {
-        "handlebarsHelper": function(value) { ... }
+    "handlebars": {
+        "partials": "/path/to/a/partial-directory",
+        "template": "/path/To/a/template",
+        "helpers": {
+            "handlebarsHelper": function(value) { ... }
+        },
+        "targetFile": "index.html"
     },
     "less": {
         "main": [
@@ -143,6 +146,20 @@ This object is mostly useful, if you create your own Bootprint module:
  **engine** allows you to access engine internals (such as the registered partials ) from the helper and **config** allows you to build configurable templates.
 
 *Note: It is planned to provide mechanisms and conventions for module-configuration, such as a helper that accesses the Bootprint-configuration in a predefined way.*
+
+## Target file
+
+By default, an `index.html`-file is written into the specified output directory.
+If you want to call the file differently (for example because you are actually,
+creating a markdown file, you can specify:
+
+```js
+module.exports = {
+    handlebars: {
+        targetFile: 'README.md'
+    }
+}
+```
 
 ## Preprocessor
 
