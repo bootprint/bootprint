@@ -3,7 +3,7 @@
 ## v0.5.0 - 2015-06-22
 ### Changed
 
-- Preferred path for handlebars options is not in `options.handlebars` (instead of `options`)
+- Preferred path for handlebars options is now in `options.handlebars` (instead of `options`)
   with old configuration still supported
 - Support for specifiying a target-filename in `options.handlebars.targetFile` (defaults to `index.html`)
 
