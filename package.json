@@ -7,6 +7,7 @@
     "bootprint": "bootprint-cli.js"
   },
   "scripts": {
+    "preversion": "npm test",
     "test": "nodeunit tests/"
   },
   "repository": {
