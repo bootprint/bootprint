@@ -13,7 +13,8 @@ module.exports = {
         "helpers": {
             "handlebarsHelper": function(value) { ... }
         },
-        "targetFile": "index.html"
+        "targetFile": "index.html",
+        "preprocessor": function(obj) { ... }
     },
     "less": {
         "main": [
@@ -23,8 +24,7 @@ module.exports = {
         "paths": [
             "a/less/include/path"
         ]
-    },
-    "preprocessor": function(obj) { ... }
+    }
 }
 ```
 
@@ -169,16 +169,18 @@ In such a case, you can include a preprocessor-function in the configuration:
 
 ```js
 module.exports = {
-    /**
-     * @param {object} obj the input JSON object.
-     * @return {object|Promise<object>} an object of the promise for an object
-     **/
-    preprocessor: function(obj) {
-        // Call parent preprocessor
-        var result = this.parent(object);
-        // Do something to the result
-        // Return either the result or a promise for the result.
-        return result;
+    handlebars: {
+        /**
+         * @param {object} obj the input JSON object.
+         * @return {object|Promise<object>} an object of the promise for an object
+         **/
+        preprocessor: function(obj) {
+            // Call parent preprocessor
+            var result = this.parent(object);
+            // Do something to the result
+            // Return either the result or a promise for the result.
+            return result;
+        }
     }
 }
 ```

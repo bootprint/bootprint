@@ -6,6 +6,7 @@
 - Template configuration should now be done with `options.handlebars.templates` pointing to a directory
   containing a `index.html.hbs` file (instead of using `options.handlebars.template` to point to a
   template file). Old behaviour still supported. Multiple template files might be supported in the future.
+- Pre-processor configuration should now be done with `options.handlebars.preprocessor`
 
 ## v0.5.1 - 2015-06-22
 ### Fixed
