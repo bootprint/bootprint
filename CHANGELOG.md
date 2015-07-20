@@ -1,6 +1,6 @@
 # Release notes
 
-## Upcoming
+## v0.6.0 - 2015-07-20
 ### Changed
 
 - Template configuration should now be done with `options.handlebars.templates` pointing to a directory
