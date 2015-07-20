@@ -1,6 +1,6 @@
 # Release notes
 
-## Upcoming
+## v0.7.1 - 2015-07-20
 ### Fixed
 
 - Compatibility code fixed...
