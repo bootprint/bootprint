@@ -1,6 +1,6 @@
 # Release notes
 
-## Upcoming
+## v0.7.0 - 2015-07-20
 ### Fixed
 
 - Compatibility code for legaxy config format did not respect all possible variations.
