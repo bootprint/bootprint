@@ -1,6 +1,6 @@
 # Release notes
 
-## Upcoming
+## v0.7.2 - 2015-09-01
 ### Fixed
 
 - Development-Mode did not start watcher on Handlebars partials
