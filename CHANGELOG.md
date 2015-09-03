@@ -1,6 +1,6 @@
 # Release notes
 
-## Upcoming
+## v0.7.3 - 2015-09-03
 ### Fixed
 
 - When passing a plaing object as data, bootprint has thrown an exception 
