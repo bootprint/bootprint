@@ -2,9 +2,10 @@
 
 var program = require("commander");
 var path = require("path");
-var BootprintBuilder = require("./lib/bootprint-builder.js");
 var debug = require("debug")("bootprint:cli");
-var _package = require("./package");
+var _package = require("./package")
+var _ = require('lodash')
+var Q = require('q')
 
 program.version(_package.version)
     .usage("[options] <module> <jsonFile> <targetdir>")
@@ -23,22 +24,27 @@ var templateModule = program.args[0];
 var jsonFile = program.args[1];
 var targetDir = program.args[2];
 var options = program['configFile']; // Coerced by commander via fn-parameter
-options.developmentMode = program["developmentMode"];
 
 // Load and configure bootprint
 var bootprint = require("./index.js")
     .load(requireTemplateModule(templateModule))
     .merge(options)
-    .build(jsonFile, targetDir);
+    .build(jsonFile, targetDir)
 
-// Generate HTML and CSS
-bootprint.generate().then(function () {
-    if (options.developmentMode) {
-        require("./lib/development-mode.js")(bootprint, jsonFile, targetDir);
-    }
-}).done(function () {
-    console.log("done");
-});
+if (program.developmentMode) {
+    bootprint.watch()
+    var liveServer = require("live-server");
+    var params = {
+        port: 8181,
+        host: "127.0.0.1",
+        root: targetDir,
+        noBrowser: true
+    };
+    liveServer.start(params);
+} else {
+    bootprint.generate().done(console.log)
+}
+
 
 /**
  * Load the template module. Try loading "bootprint-`moduleName`" first. If it does not exist
@@ -47,20 +53,20 @@ bootprint.generate().then(function () {
  * @return {function} the builder-function of the loaded module
  */
 function requireTemplateModule(moduleName) {
-    var templateModul = null;
+    var templateModule = null;
     try {
-        templateModul = require("bootprint-" + moduleName);
+        templateModule = require("bootprint-" + moduleName);
         debug("loaded template-module: ","bootprint-" + moduleName)
     } catch (e) {
         if (e.code === 'MODULE_NOT_FOUND') {
-            templateModul = require(path.resolve(moduleName));
+            templateModule = require(path.resolve(moduleName));
             debug("loaded template-module: ",moduleName)
         } else {
             throw e;
         }
     }
-    debug("template-module is ",templateModul);
-    return templateModul;
+    debug("template-module is ",templateModule);
+    return templateModule;
 }
 
 /**

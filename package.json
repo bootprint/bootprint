@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/nknapp/bootprint",
   "dependencies": {
+    "customize-write-files": "<1.0.0",
+    "customize-watch": "<1.0.0",
     "cheerio": "^0.18.0",
     "chokidar": "^1.0.0-rc4",
     "commander": "^2.6.0",
