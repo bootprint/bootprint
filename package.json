@@ -23,6 +23,8 @@
   "dependencies": {
     "customize-write-files": "<1.0.0",
     "customize-watch": "<1.0.0",
+    "customize-engine-handlebars": "<1.0.0",
+    "customize-engine-less": "<1.0.0",
     "cheerio": "^0.18.0",
     "chokidar": "^1.0.0-rc4",
     "commander": "^2.6.0",
