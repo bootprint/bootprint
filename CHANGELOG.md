@@ -1,6 +1,6 @@
 # Release notes
 
-## v0.7.4 - 2015-10-15
+## v0.7.4, v0.7.5 - 2015-10-15
 ### Change
 
 * Bootprint now uses `customize` and its engines. This is only an internal change
