@@ -4,6 +4,7 @@ var qfs = require('q-io/fs')
 var write = require("customize-write-files")
 var _ = require('lodash')
 var path = require("path");
+var httpGet = require('get-promise');
 
 
 
