@@ -1,6 +1,6 @@
 # Release notes
 
-## Upcoming
+## v0.7.6 - 2015-10-17
 ### Fix
 
 * Issue #7: ReferenceError: httpGet is not defined 
