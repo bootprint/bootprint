@@ -1,16 +1,12 @@
 var customize = require('customize-watch')
 var Q = require('q')
-var qfs = require('q-io/fs')
-var write = require("customize-write-files")
+var write = require('customize-write-files')
 var _ = require('lodash')
-var path = require("path");
-var httpGet = require('get-promise');
-
-
+var path = require('path')
+var httpGet = require('get-promise')
 
 // Modify constructor: Add #build method
-var Customize = customize.Customize;
-
+var Customize = customize.Customize
 
 /**
  *
@@ -18,30 +14,28 @@ var Customize = customize.Customize;
  * @param targetDir
  * @returns {{generate: Function}}
  */
-Customize.prototype.build = function(jsonFile, targetDir) {
+Customize.prototype.build = function (jsonFile, targetDir) {
   var withData = this.merge({
     handlebars: {
       data: loadFromFileOrHttp(jsonFile)
     }
-  });
+  })
 
   // Return a dummy the simulates the old bootprint-interface
   return {
-    generate: function generate() {
-      return withData.run().then(write(targetDir));
+    generate: function generate () {
+      return withData.run().then(write(targetDir))
     },
-    watch: function() {
-      return withData.watch().on("update", write(targetDir));
+    watch: function () {
+      return withData.watch().on('update', write(targetDir))
     }
   }
 }
-
 
 // Pre-configure customize
 module.exports = customize()
   .registerEngine('handlebars', require('customize-engine-handlebars'))
   .registerEngine('less', require('customize-engine-less'))
-
 
 /**
  * Helper method for loading the bootprint-data
