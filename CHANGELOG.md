@@ -6,7 +6,7 @@
 
 * Update dependencies
 * Add `files`-property to package.json
-
+* Input of "getPromise" must JSON-parsed (Fixes loading swagger-specs via HTTP)
 
 ## v0.7.6 - 2015-10-17
 ### Fix

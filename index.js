@@ -58,7 +58,7 @@ function loadFromFileOrHttp (fileOrUrlOrData) {
         error.result = result
         throw error
       }
-      return result.data
+      return JSON.parse(result.data)
     })
   } else {
     return require(path.resolve(fileOrUrlOrData))
