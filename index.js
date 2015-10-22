@@ -52,13 +52,24 @@ function loadFromFileOrHttp (fileOrUrlOrData) {
   // otherwise load data from url or file
   if (fileOrUrlOrData.match(/^https?:\/\//)) {
     // Use the "request" package to download data
-    return httpGet(fileOrUrlOrData).then(function (result) {
+    return httpGet(fileOrUrlOrData,{
+      redirect: true,
+      headers: {
+        'User-Agent': 'Bootprint/'+require('./package').version
+      }
+    }).then(function (result) {
       if (result.status !== 200) {
         var error = new Error('HTTP request failed with code ' + result.status)
         error.result = result
         throw error
       }
       return JSON.parse(result.data)
+    },function(error) {
+      if (error.status) {
+        throw new Error("Got "+error.status+" "+error.data+" when requesting "+error.url,"E_HTTP");
+      } else {
+        throw error;
+      }
     })
   } else {
     return require(path.resolve(fileOrUrlOrData))
