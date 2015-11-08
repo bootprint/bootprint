@@ -72,6 +72,8 @@ function loadFromFileOrHttp (fileOrUrlOrData) {
       }
     })
   } else {
-    return require(path.resolve(fileOrUrlOrData))
+    var absPath = path.resolve(fileOrUrlOrData)
+    delete require.cache[absPath]
+    return require(absPath)
   }
 }
