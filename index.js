@@ -25,9 +25,22 @@ Customize.prototype.build = function (jsonFile, targetDir) {
 
   // Return a dummy the simulates the old bootprint-interface
   return {
-    generate: function generate () {
-      return withData.run().then(write(targetDir))
+    /**
+     * Run Bootprint and write the result to the specified target directory
+     * @param options {object} options passed to Customize#run()
+     * @returns {Promise} a promise for the completion of the build
+     */
+    generate: function generate (options) {
+      return withData.run(options).then(write(targetDir))
     },
+
+    /**
+     * Run the file watcher to watch all files loaded into the
+     * current Bootprint-configuration.
+     * The watcher run Bootprint every time one the the input files, templates or helpers changes.
+     * @returns {EventEmitter} an EventEmitter that sends an `update`-event after each
+     *   build, but before the files are written to disc.
+     */
     watch: function () {
       return withData.watch().on('update', write(targetDir))
     }
@@ -54,10 +67,10 @@ function loadFromFileOrHttp (fileOrUrlOrData) {
   // otherwise load data from url or file
   if (fileOrUrlOrData.match(/^https?:\/\//)) {
     // Use the "request" package to download data
-    return httpGet(fileOrUrlOrData,{
+    return httpGet(fileOrUrlOrData, {
       redirect: true,
       headers: {
-        'User-Agent': 'Bootprint/'+require('./package').version
+        'User-Agent': 'Bootprint/' + require('./package').version
       }
     }).then(function (result) {
       if (result.status !== 200) {
@@ -68,9 +81,9 @@ function loadFromFileOrHttp (fileOrUrlOrData) {
       return yaml.safeLoad(result.data)
     },function(error) {
       if (error.status) {
-        throw new Error("Got "+error.status+" "+error.data+" when requesting "+error.url,"E_HTTP");
+        throw new Error('Got ' + error.status + ' ' + error.data + ' when requesting ' + error.url, 'E_HTTP')
       } else {
-        throw error;
+        throw error
       }
     })
   } else {
