@@ -2,8 +2,10 @@ var customize = require('customize-watch')
 var Q = require('q')
 var write = require('customize-write-files')
 var _ = require('lodash')
+var fs = require('fs')
 var path = require('path')
 var httpGet = require('get-promise')
+var yaml = require('js-yaml')
 
 // Modify constructor: Add #build method
 var Customize = customize.Customize
@@ -63,7 +65,7 @@ function loadFromFileOrHttp (fileOrUrlOrData) {
         error.result = result
         throw error
       }
-      return JSON.parse(result.data)
+      return yaml.safeLoad(result.data)
     },function(error) {
       if (error.status) {
         throw new Error("Got "+error.status+" "+error.data+" when requesting "+error.url,"E_HTTP");
@@ -72,8 +74,8 @@ function loadFromFileOrHttp (fileOrUrlOrData) {
       }
     })
   } else {
-    var absPath = path.resolve(fileOrUrlOrData)
-    delete require.cache[absPath]
-    return require(absPath)
+    return Q.nfcall(fs.readFile, fileOrUrlOrData, 'utf8').then(function(data) {
+      return yaml.safeLoad(data)
+    })
   }
 }
