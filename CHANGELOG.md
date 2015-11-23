@@ -1,5 +1,11 @@
 # Release notes
 
+## Upcoming
+
+### Add
+
+* #4: Support for yaml via `js-yaml`, thanks [@stephank](https://github.com/stephank)
+
 ## v0.7.8 - 2015-10-22
 
 ### Fix
