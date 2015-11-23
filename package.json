@@ -6,7 +6,12 @@
   "bin": {
     "bootprint": "bootprint-cli.js"
   },
-  "scripts": {},
+  "scripts": {
+    "preformat": "standard --version || npm -g install standard",
+    "format": "standard --format",
+    "pretest": "standard --version || npm -g install standard",
+    "test": "mocha --recursive && standard"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/nknapp/bootprint.git"

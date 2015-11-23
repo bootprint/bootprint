@@ -3,7 +3,6 @@ var Q = require('q')
 var write = require('customize-write-files')
 var _ = require('lodash')
 var fs = require('fs')
-var path = require('path')
 var httpGet = require('get-promise')
 var yaml = require('js-yaml')
 
@@ -79,7 +78,7 @@ function loadFromFileOrHttp (fileOrUrlOrData) {
         throw error
       }
       return yaml.safeLoad(result.data)
-    },function(error) {
+    }, function (error) {
       if (error.status) {
         throw new Error('Got ' + error.status + ' ' + error.data + ' when requesting ' + error.url, 'E_HTTP')
       } else {
@@ -87,7 +86,7 @@ function loadFromFileOrHttp (fileOrUrlOrData) {
       }
     })
   } else {
-    return Q.nfcall(fs.readFile, fileOrUrlOrData, 'utf8').then(function(data) {
+    return Q.nfcall(fs.readFile, fileOrUrlOrData, 'utf8').then(function (data) {
       return yaml.safeLoad(data)
     })
   }

@@ -10,8 +10,8 @@ var fs = require('fs')
 require('trace')
 require('clarify')
 process.on('exit', function () {
-  var unhandledReasons = require('q').getUnhandledReasons();
-  if (unhandledReasons.length>0) {
+  var unhandledReasons = require('q').getUnhandledReasons()
+  if (unhandledReasons.length > 0) {
     console.log(unhandledReasons)
   }
 })
@@ -44,8 +44,8 @@ function run () {
     .generate()
 }
 
-describe('The input json', function () {
-  it('should be loaded on each bootprint-run, even within the same process', function () {
+describe('Bootprint ', function () {
+  it('should load the input json each time it runs', function () {
     fs.writeFileSync(swaggerJsonFile, JSON.stringify({
       eins: 'one', zwei: 'two', drei: 'three'
     }))
@@ -60,5 +60,23 @@ describe('The input json', function () {
       var content = fs.readFileSync(path.join(targetDir, 'index.html'), {encoding: 'utf-8'})
       expect(content.trim()).to.equal('eins: un\nzwei: deux\ndrei: trois')
     })
+  })
+
+  it('should accept yaml as input', function () {
+    return bootprint
+      .merge({
+        handlebars: {
+          templates: path.join(__dirname, 'fixtures', 'handlebars')
+        },
+        less: {
+          main: require.resolve('./fixtures/main.less')
+        }
+      })
+      .build(require.resolve('./fixtures/input.yaml'), targetDir)
+      .generate()
+      .then(function () {
+        var content = fs.readFileSync(path.join(targetDir, 'index.html'), {encoding: 'utf-8'})
+        return expect(content.trim()).to.equal('eins: ichi\nzwei: ni\ndrei: san')
+      })
   })
 })
