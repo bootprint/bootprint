@@ -37,6 +37,7 @@ You can fork and clone the repo from github. Run
 
 * Run `npm install` to install all the dependencies needed to build and run the project.
 * Run `npm test` to run unit tests and validate the `standard` coding-style.
+* Run `npm run thought` to generate the README.md and other markdown files in the repository. 
 
 It is intentional to don't have `standard`, `thought`, `istanbul` and `coveralls` in the devDependencies. 
 `standard` is a rather large package which you would not want to have copied into the `node_modules`-folder

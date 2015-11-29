@@ -45,20 +45,11 @@ included in the `bootprint-base` module.
 
 In the bootprint-configuration, you can provide a directory containing partials, for example:
 
-```js
-var path = require('path')
-module.exports = {
-  handlebars: {
-    partials: path.join(__dirname, './partials')
-  }
-}
-
-```
-
+{{include '.thought/snippets/custom-partials.js'}}
 
 The partials directory is traversed recursively and all `.hbs`-files are registered as partial under
 their path relative to the `partials`-directory and without the extension. For example, 
-`partials/json-schema/properties.hbs` can be accessed in Handlebars by writing `{{>json-schema/properties}}`.
+`partials/json-schema/properties.hbs` can be accessed in Handlebars by writing `\{{>json-schema/properties}}`.
 
 The module you are using already has partials and you can override them by providing a partial file with the 
 same relative path inside *your* `partials`-directory. For example, if you are using the `bootprint-json-schema`
@@ -76,16 +67,7 @@ later on.*
 
 You can also replace the whole template and add other templates that are compiled as well.
 
-```js
-var path = require('path')
-module.exports = {
-  handlebars: {
-    templates: path.join(__dirname, './templates')
-  }
-}
-
-```
-
+{{include '.thought/snippets/custom-templates.js'}}
 
 If you put an `index.html.hbs`-file into the `temlates/`-directory, it will override the default template.
 If you put an `second.html.hbs`-file into this directory, a `second.html`-file will be created in your
@@ -101,46 +83,18 @@ Maybe we can adapt it to be more flexible.*
 If your template or your partials require certain Handlebars-helpers, you can
 provide custom helpers to the configuration:
 
-```js
-module.exports = {
-  handlebars: {
-    helpers: {
-      "shout-loud": function (value) {
-        return value.toUpperCase();
-      }
-    }
-  }
-}
-
-```
-
+{{include '.thought/snippets/custom-helpers.js'}}
 
 Or you can set the path to a JavaScript-module exporting an object of functions
 
-```js
-// handlebars/helpers.js
-module.exports = {
-  'shout-loud': function (value) {
-    return value.toUpperCase()
-  }
-}
-
-// bootprint-configuration
-module.exports = {
-  handlebars: {
-    helpers: require.resolve('./handlebars/helpers.js')
-  }
-}
-
-```
-
+{{include '.thought/snippets/custom-helper-file.js'}}
 
 *Note that we use `require.resolve` to reference the helper file and not `require`. That way, Bootprint can 
 register a file-watcher in development mode and automatically update the output when a helper changes.*
 
 If one of your helpers already exists in the module you are using, it replaces the original helper.
 
-Usually, if you call a helper in Handlebars using `{{helper param1 param2}}`, the helper needs to be a 
+Usually, if you call a helper in Handlebars using `\{{helper param1 param2}}`, the helper needs to be a 
 `function(param1, param2, options)`, where `options` contains additional information such as named
 parameters and block data.
 
@@ -171,54 +125,11 @@ template than to solve rendering problems within the template.
 
 In such a case, you can include a preprocessor-function in the configuration:
 
-```js
-module.exports = {
-  handlebars: {
-    /**
-     * @param {object} obj the input JSON object.
-     * @return {object|Promise<object>} an object of the promise for an object
-     **/
-    preprocessor: function (obj) {
-      // Call parent preprocessor
-      var result = this.parent(object)
-      // Do something to the result
-      // Return either the result or a promise for the result.
-      return result
-    }
-  }
-}
-
-```
-
+{{include './.thought/snippets/custom-preprocessor.js'}}
 
 You can also put the preprocessor into its own javascript-file and reference the file from the configuration:
 
-```js
-// preprocessor.js
-/**
- * @param {object} obj the input JSON object.
- * @return {object|Promise<object>} an object or the promise for an object
- **/
-module.exports = function (obj) {
-  // Call parent preprocessor
-  var result = this.parent(object);
-  // Do something to the result
-  // Return either the result or a promise for the result.
-  return result;
-}
-
-
-
-// configuration file
-module.exports = {
-  handlebars: {
-
-    preprocessor: require.resolve('./preprocessor.js')
-  }
-}
-
-```
-
+{{include './.thought/snippets/custom-preprocessor-file.js'}}
 
 *As with the helpers we use `require.resolve` and not `require`; Bootprint will `require` the file itself. The big advantage is
 that in the development mode Bootprint is able to register a file-watcher for the preprocessor-file so that 

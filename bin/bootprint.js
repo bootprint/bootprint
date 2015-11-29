@@ -3,7 +3,7 @@
 var program = require('commander')
 var path = require('path')
 var debug = require('debug')('bootprint:cli')
-var _package = require('./package')
+var _package = require('../package')
 
 program.version(_package.version)
   .usage('[options] <module> <jsonFile> <targetdir>')
@@ -24,7 +24,7 @@ var targetDir = program.args[2]
 var options = program['configFile'] // Coerced by commander via fn-parameter
 
 // Load and configure bootprint
-var bootprint = require('./index.js')
+var bootprint = require('../index.js')
   .load(requireTemplateModule(templateModule))
   .merge(options)
   .build(jsonFile, targetDir)

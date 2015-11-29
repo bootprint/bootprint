@@ -1,16 +1,22 @@
 {
   "name": "bootprint",
-  "version": "0.8.0",
-  "description": "Converts json into a static html page using Handlebars and Bootstrap",
+  "version": "0.8.1",
+  "description": "Converts json and yaml into a static html page using Handlebars and Bootstrap",
   "main": "index.js",
   "bin": {
-    "bootprint": "bootprint-cli.js"
+    "bootprint": "bin/bootprint.js"
   },
+  "preferGlobal": true,
   "scripts": {
     "preformat": "standard --version || npm -g install standard",
     "format": "standard --format",
     "pretest": "standard --version || npm -g install standard",
-    "test": "mocha --recursive && standard"
+    "test": "mocha --recursive && standard",
+    "thought": "thought run -a",
+    "prethoughtcheck": "thought --version || npm -g install thought",
+    "thoughtcheck": "thought check-engines",
+    "version": "npm run thought",
+    "preversion": "npm run thoughtcheck"
   },
   "repository": {
     "type": "git",
@@ -34,7 +40,7 @@
     "js-yaml": "^3.4.5",
     "live-server": "^0.8.1",
     "lodash": "^3.3.1",
-    "q": "^1.2.0",
+    "q": "^1.4.1",
     "trace": "^2.0.0"
   },
   "files": [
@@ -42,6 +48,7 @@
     "bootprint-cli.js"
   ],
   "devDependencies": {
+    "bootprint-swagger": "^0.13.1",
     "chai": "^3.4.0",
     "mocha": "^2.3.3"
   }

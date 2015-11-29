@@ -10,24 +10,12 @@ bootprint swagger http://petstore.swagger.io/v2/swagger.json target
 ```
 
 The `bootprint`-module only contains the core functionality for building HTML and CSS.
-In order to use `bootprint`, you need to install a template package such as [bootprint-swagger](https://npmjs.com/package/bootprint-swagger).
+In order to use `bootprint`, you need to install a template package such as {{npm 'bootprint-swagger'}}.
 Both modules must be installed globally.
 
 You can get help by typing `bootprint --help`:
 
-```
-Usage: bootprint [options] <module> <jsonFile> <targetdir>
-
-  Converts json and yaml into a static html page using Handlebars and Bootstrap
-
-  Options:
-
-    -h, --help                output usage information
-    -V, --version             output the version number
-    -f, --config-file <file>  Specify a config file for custom configurations
-    -d, --development-mode    Turn on file-watcher, less source maps and http-server with live-reload
-    -l, --long-stack          Turn on long and clarified stack-traces
-``` 
+{{exec 'node ./bin/bootprint.js --help'}} 
 
 * The `<spec>` consists of the name of a globally installed template-module optionally without the `bootprint-` prefix.
     When running `bootprint swagger ...` bootprint will first try `require('bootprint-swagger')`. If this module
@@ -48,6 +36,6 @@ Usage: bootprint [options] <module> <jsonFile> <targetdir>
     generate CSS source maps, so in the Chromium Development-Tools
     you can see where your styles originate.
 * `-l` or `--long-stack` is mainly a helper when changing Bootprint's core code or when adding custom helpers. 
-    It uses the [trace](https://npmjs.com/package/trace) package and the [clarify](https://npmjs.com/package/clarify) package to provide better call stacks for exceptions.
+    It uses the {{npm 'trace'}} package and the {{npm 'clarify'}} package to provide better call stacks for exceptions.
 
             
