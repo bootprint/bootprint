@@ -1,7 +1,7 @@
 {
   "name": "bootprint",
   "version": "0.8.0",
-  "description": "Converts json into a static html page using Handlebars and Bootstrap",
+  "description": "Converts json and yaml into a static html page using Handlebars and Bootstrap",
   "main": "index.js",
   "bin": {
     "bootprint": "bootprint-cli.js"
@@ -42,6 +42,7 @@
     "bootprint-cli.js"
   ],
   "devDependencies": {
+    "bootprint-swagger": "^0.13.1",
     "chai": "^3.4.0",
     "mocha": "^2.3.3"
   }
