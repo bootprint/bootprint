@@ -10,7 +10,12 @@
     "preformat": "standard --version || npm -g install standard",
     "format": "standard --format",
     "pretest": "standard --version || npm -g install standard",
-    "test": "mocha --recursive && standard"
+    "test": "mocha --recursive && standard",
+    "thought": "thought run -a",
+    "prethoughtcheck": "thought --version || npm -g install thought",
+    "thoughtcheck": "thought check-engines",
+    "version": "npm run thought",
+    "preversion": "npm run thoughtcheck"
   },
   "repository": {
     "type": "git",
