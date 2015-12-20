@@ -28,13 +28,13 @@ merging configurations and by loading one or multiple other configuration module
 loads `bootprint-json-schema' which in turn loads `bootprint-base`. Each of the three modules merge their 
 custom configurations after loading their parent modules.
 
-#### [.buildConfig(): Promise&lt;object>]({{@url}}#customizebuildconfig--promiseobject)
+#### [.buildConfig(): Promise<object>]({{@url}}#customizebuildconfig--promiseobject)
 
 This method can be called in order to inspect intermediate configuration results for documentation or testing purposes.
 The returned object is the merge-result of configurations. However, not the input of the `.merge` function is merged,
 but an internal representation that consists of watch-files and the configuration after proprocessing by the engines.
 
-#### [.run(options:object): Promise&lt;object>]({{@url}}#customizerunoptions--promiseobject)
+#### [.run(options:object): Promise<object>]({{@url}}#customizerunoptions--promiseobject)
 
 This method invokes one or all engines of the configuration Customize engine. In Bootprint, unless the `.registerEngine()`
 method has been called, this is `customize-engine-less` and `customize-engine-handlebars`.
@@ -65,7 +65,7 @@ used as input directly. In any case, the input is merged into the `handlebars.da
 
 The Bootprint object provides the following methods:
 
-### `.generate():Promise&lt;string[]>`
+### `.generate():Promise<string[]>`
 
 This method runs all configured engines and writes the result to the target directory using the {{npm 'customize-write-files'}}
 module. The result of this call is a Promise for a list of generated files.

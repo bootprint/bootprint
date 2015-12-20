@@ -80,14 +80,14 @@ In this configuration the engines [customize-engine-handlebars](https://npmjs.co
     
 ### Customize methods
 
-The following [methods from the `Customize`-module()](https://github.com/nknapp/customize/blob/v0.6.1/README.md#customizecustomize) can be used:
+The following [methods from the `Customize`-module()](https://github.com/nknapp/customize/blob/v0.7.0/README.md#customizecustomize) can be used:
 
-#### [.merge(configuration:object): Customize](https://github.com/nknapp/customize/blob/v0.6.1/README.md#module_customize..Customize+merge)
+#### [.merge(configuration:object): Customize](https://github.com/nknapp/customize/blob/v0.7.0/README.md#module_customize..Customize+merge)
 
 This method returns a new Customize instance, merging another configuration with the current one.
 The merging rules of Customize apply. The configuration object must match [this JSON-schema](doc/configuration-schema.json)
 
-#### [.load(configurationModule:function(customize:Customize):Customize):Customize](https://github.com/nknapp/customize/blob/v0.6.1/README.md#customizeloadcustomizemodule--customize)
+#### [.load(configurationModule:function(customize:Customize):Customize):Customize](https://github.com/nknapp/customize/blob/v0.7.0/README.md#customizeloadcustomizemodule--customize)
 
 This method loads a configuration module (such as [bootprint-swagger](https://npmjs.com/package/bootprint-swagger) or [bootprint-json-schema](https://npmjs.com/package/bootprint-json-schema).
 A configuration module is a `function(customize:Customize): Customize` that accepts a Customize instance and 
@@ -96,13 +96,13 @@ merging configurations and by loading one or multiple other configuration module
 loads `bootprint-json-schema' which in turn loads `bootprint-base`. Each of the three modules merge their 
 custom configurations after loading their parent modules.
 
-#### [.buildConfig(): Promise&lt;object>](https://github.com/nknapp/customize/blob/v0.6.1/README.md#customizebuildconfig--promiseobject)
+#### [.buildConfig(): Promise<object>](https://github.com/nknapp/customize/blob/v0.7.0/README.md#customizebuildconfig--promiseobject)
 
 This method can be called in order to inspect intermediate configuration results for documentation or testing purposes.
 The returned object is the merge-result of configurations. However, not the input of the `.merge` function is merged,
 but an internal representation that consists of watch-files and the configuration after proprocessing by the engines.
 
-#### [.run(options:object): Promise&lt;object>](https://github.com/nknapp/customize/blob/v0.6.1/README.md#customizerunoptions--promiseobject)
+#### [.run(options:object): Promise<object>](https://github.com/nknapp/customize/blob/v0.7.0/README.md#customizerunoptions--promiseobject)
 
 This method invokes one or all engines of the configuration Customize engine. In Bootprint, unless the `.registerEngine()`
 method has been called, this is `customize-engine-less` and `customize-engine-handlebars`.
@@ -132,7 +132,7 @@ used as input directly. In any case, the input is merged into the `handlebars.da
 
 The Bootprint object provides the following methods:
 
-### `.generate():Promise&lt;string[]>`
+### `.generate():Promise<string[]>`
 
 This method runs all configured engines and writes the result to the target directory using the [customize-write-files](https://npmjs.com/package/customize-write-files)
 module. The result of this call is a Promise for a list of generated files.
