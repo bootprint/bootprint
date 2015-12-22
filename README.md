@@ -21,6 +21,8 @@ and use them as base for further customizations.
 npm install -g bootprint
 ```
 
+## Usage
+
 After installing `bootprint` perform the following steps
 
 ```bash
