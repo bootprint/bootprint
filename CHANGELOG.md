@@ -1,5 +1,11 @@
 # Release notes
 
+## Upcoming
+
+### Fix
+
+* Major documentation fixes.
+
 ## v0.8.0 - 2015-11-23
 
 ### Add
