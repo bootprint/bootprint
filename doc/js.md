@@ -80,7 +80,7 @@ require('bootprint')
   })
   .build('content.yaml', 'target')
   .generate()
-  .done(console.log);
+  .done(console.log)
 ```
 
 This will generate the output:
