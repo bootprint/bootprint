@@ -1,5 +1,13 @@
 # Release notes
 
+## Upcoming
+
+### Fix
+
+* Fixed: Wrong entry for "main"-script in `package.json` (thanks to [@joaocosta](https://github.com/joaocosta))
+* Don't use "trace" in test-cases since it requires Node 4
+* Mention requirement of Node 4 for "-l" option in documentation
+
 ## v0.8.2 - 2015-12-22
 
 ### Fix
