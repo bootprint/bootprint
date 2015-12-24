@@ -7,8 +7,8 @@
 
 var path = require('path')
 var fs = require('fs')
-require('trace')
-require('clarify')
+// require('trace')
+// require('clarify')
 process.on('exit', function () {
   var unhandledReasons = require('q').getUnhandledReasons()
   if (unhandledReasons.length > 0) {
