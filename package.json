@@ -45,7 +45,7 @@
   },
   "files": [
     "index.js",
-    "bootprint-cli.js"
+    "bin/bootprint.js"
   ],
   "devDependencies": {
     "bootprint-swagger": "^0.13.1",
