@@ -10,7 +10,7 @@ program.version(_package.version)
   .description(_package.description)
   .option('-f, --config-file <file>', 'Specify a config file for custom configurations', loadConfig, {})
   .option('-d, --development-mode', 'Turn on file-watcher, less source maps and http-server with live-reload')
-  .option('-l, --long-stack', 'Turn on long and clarified stack-traces', enableLongStack)
+  .option('-l, --long-stack', 'Turn on long and clarified stack-traces. Requires Node 4 or newer', enableLongStack)
   .parse(process.argv)
 
 if (program.args.length < 2) {
