@@ -1,4 +1,9 @@
-# bootprint
+# bootprint 
+
+[![NPM version](https://badge.fury.io/js/bootprint.svg)](http://badge.fury.io/js/bootprint)
+     [![Travis Build Status](https://travis-ci.org/bootprint/bootprint.svg?branch=master)](https://travis-ci.org/bootprint/bootprint)
+   [![Coverage Status](https://img.shields.io/coveralls/bootprint/bootprint.svg)](https://coveralls.io/r/bootprint/bootprint)
+
 
 > Converts json and yaml into a static html page using Handlebars and Bootstrap
 

@@ -1,6 +1,12 @@
 # Release notes
 
 <a name="current-release"></a>
+# Version 0.8.4 (Tue, 15 Mar 2016 14:06:07 GMT)
+
+* [22c9c48](https://github.com/bootprint/bootprint/commit/22c9c48) Adjust travis-configuration - Nils Knappmeier
+* [16a5072](https://github.com/bootprint/bootprint/commit/16a5072) Move to bootprint-organization and enable ghook for StandardJS - Nils Knappmeier
+
+
 ## v0.8.3 - 2015-12-24
 
 ### Fix
@@ -124,4 +130,3 @@
 ### Fixed
 
 - [#1: cli.js not found when installing from npm or master](https://github.com/nknapp/bootprint/issues/1)
-
