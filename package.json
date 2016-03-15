@@ -15,19 +15,19 @@
     "thought": "thought run -a",
     "prethoughtcheck": "thought --version || npm -g install thought",
     "thoughtcheck": "thought check-engines",
-    "version": "npm run thought",
+    "version": "thoughtful changelog -o -a && npm run thought",
     "preversion": "npm run thoughtcheck"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nknapp/bootprint.git"
+    "url": "https://github.com/bootprint/bootprint.git"
   },
   "author": "Nils Knappmeier",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nknapp/bootprint/issues"
+    "url": "https://github.com/bootprint/bootprint/issues"
   },
-  "homepage": "https://github.com/nknapp/bootprint",
+  "homepage": "https://github.com/bootprint/bootprint",
   "dependencies": {
     "clarify": "^1.0.5",
     "commander": "^2.6.0",
@@ -47,9 +47,16 @@
     "index.js",
     "bin/bootprint.js"
   ],
+  "config": {
+    "ghooks": {
+      "pre-commit": "standard"
+    }
+  },
   "devDependencies": {
     "bootprint-swagger": "^0.13.1",
     "chai": "^3.4.0",
-    "mocha": "^2.3.3"
+    "ghooks": "^1.0.3",
+    "mocha": "^2.3.3",
+    "thoughtful-release": "^0.3.0"
   }
 }

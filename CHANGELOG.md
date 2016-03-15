@@ -1,5 +1,6 @@
 # Release notes
 
+<a name="current-release"></a>
 ## v0.8.3 - 2015-12-24
 
 ### Fix
