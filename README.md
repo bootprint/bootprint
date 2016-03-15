@@ -7,7 +7,7 @@
 
 > Converts json and yaml into a static html page using Handlebars and Bootstrap
 
-![Bootprint logo](http://nknapp.github.io/bootprint/img/bootprint.svg)
+![Bootprint logo](http://bootprint.github.io/bootprint/img/bootprint.svg)
 
 `Bootprint` is a tool for converting JSON-files into static HTML-pages using [{less}](http://lesscss.org),
 [Bootstrap](http://getbootstrap.com) and [Handlebars](http://handlebarsjs.com).

@@ -1,6 +1,10 @@
 # Release notes
 
 <a name="current-release"></a>
+# Version 0.8.5 (Tue, 15 Mar 2016 14:18:06 GMT)
+
+* [5ec577c](https://github.com/bootprint/bootprint/commit/5ec577c) Bootprint logo is now at bootprint.github.io - Nils Knappmeier
+
 # Version 0.8.4 (Tue, 15 Mar 2016 14:06:07 GMT)
 
 * [22c9c48](https://github.com/bootprint/bootprint/commit/22c9c48) Adjust travis-configuration - Nils Knappmeier
