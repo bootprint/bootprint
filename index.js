@@ -75,7 +75,7 @@ function loadFromFileOrHttp (fileOrUrlOrData) {
         error.result = result
         throw error
       }
-      return yaml.safeLoad(result.data)
+      return yaml.safeLoad(result.data, {json: true})
     }, function (error) {
       if (error.status) {
         throw new Error('Got ' + error.status + ' ' + error.data + ' when requesting ' + error.url, 'E_HTTP')
@@ -85,7 +85,7 @@ function loadFromFileOrHttp (fileOrUrlOrData) {
     })
   } else {
     return Q.nfcall(fs.readFile, fileOrUrlOrData, 'utf8').then(function (data) {
-      return yaml.safeLoad(data)
+      return yaml.safeLoad(data, {json: true})
     })
   }
 }
