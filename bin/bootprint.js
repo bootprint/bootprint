@@ -13,7 +13,7 @@ program.version(_package.version)
   .option('-l, --long-stack', 'Turn on long and clarified stack-traces. Requires Node 4 or newer', enableLongStack)
   .parse(process.argv)
 
-if (program.args.length < 2) {
+if (program.args.length !== 3) {
   program.help()
 }
 
