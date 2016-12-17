@@ -11,15 +11,15 @@ In this configuration the engines [customize-engine-handlebars](https://npmjs.co
     
 ### Customize methods
 
-The following [methods from the `Customize`-module()](https://github.com/nknapp/customize/blob/v0.7.0/README.md#customizecustomize) can be used:
+The following [methods from the `Customize`-module()](https://github.com/bootprint/customize/blob/v0.8.4/README.md#customizecustomize) can be used:
 
-#### [.merge(configuration:object): Customize](https://github.com/nknapp/customize/blob/v0.7.0/README.md#module_customize..Customize+merge)
+#### [.merge(configuration:object): Customize](https://github.com/bootprint/customize/blob/v0.8.4/README.md#module_customize..Customize+merge)
 
 
 This method returns a new Customize instance, merging another configuration with the current one.
 The merging rules of Customize apply. The configuration object must match [this JSON-schema](doc/configuration-schema.json)
 
-#### [.load(configurationModule:function(customize:Customize):Customize):Customize](https://github.com/nknapp/customize/blob/v0.7.0/README.md#customizeloadcustomizemodule--customize)
+#### [.load(configurationModule:function(customize:Customize):Customize):Customize](https://github.com/bootprint/customize/blob/v0.8.4/README.md#customizeloadcustomizemodule--customize)
 
 
 This method loads a configuration module (such as [bootprint-swagger](https://npmjs.com/package/bootprint-swagger) or [bootprint-json-schema](https://npmjs.com/package/bootprint-json-schema).
@@ -29,14 +29,14 @@ merging configurations and by loading one or multiple other configuration module
 loads `bootprint-json-schema' which in turn loads `bootprint-base`. Each of the three modules merge their 
 custom configurations after loading their parent modules.
 
-#### [.buildConfig(): Promise&lt;object>](https://github.com/nknapp/customize/blob/v0.7.0/README.md#customizebuildconfig--promiseobject)
+#### [.buildConfig(): Promise&lt;object>](https://github.com/bootprint/customize/blob/v0.8.4/README.md#customizebuildconfig--promiseobject)
 
 
 This method can be called in order to inspect intermediate configuration results for documentation or testing purposes.
 The returned object is the merge-result of configurations. However, not the input of the `.merge` function is merged,
 but an internal representation that consists of watch-files and the configuration after proprocessing by the engines.
 
-#### [.run(options:object): Promise&lt;object>](https://github.com/nknapp/customize/blob/v0.7.0/README.md#customizerunoptions--promiseobject)
+#### [.run(options:object): Promise&lt;object>](https://github.com/bootprint/customize/blob/v0.8.4/README.md#customizerunoptions--promiseobject)
 
 
 This method invokes one or all engines of the configuration Customize engine. In Bootprint, unless the `.registerEngine()`

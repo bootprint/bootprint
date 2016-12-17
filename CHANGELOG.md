@@ -1,6 +1,13 @@
 # Release notes
 
 <a name="current-release"></a>
+# Version 0.9.0 (Sat, 17 Dec 2016 21:59:21 GMT)
+
+* [e61426b](https://github.com/bootprint/bootprint/commit/e61426b) Better error message when source file cannot be found - Nils Knappmeier
+* [9d9c0f8](https://github.com/bootprint/bootprint/commit/9d9c0f8) Better error-message and tests for invalid number of cli-arguments - Nils Knappmeier
+* [c273633](https://github.com/bootprint/bootprint/commit/c273633) Fix check for correct number of command-line arguments - Nils Knappmeier
+* [0290846](https://github.com/bootprint/bootprint/commit/0290846) fixes YAMLException that occurs on some openapi yaml - Kit Plummer
+
 # Version 0.8.5 (Tue, 15 Mar 2016 14:18:06 GMT)
 
 * [5ec577c](https://github.com/bootprint/bootprint/commit/5ec577c) Bootprint logo is now at bootprint.github.io - Nils Knappmeier
