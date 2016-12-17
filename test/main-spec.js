@@ -104,12 +104,34 @@ describe('The CLI interface', function () {
     expect(outputFile('main.css'), 'Checking main.css').to.equal("body{background-color:'#abc'}")
   })
 
-  it('should return with a non-zero exit-code if too few parameters are given', function () {
+  it('should return with a non-zero exit-code and an error message if too few parameters are given', function () {
     var result = cp.spawnSync('./bin/bootprint.js ./test/fixtures/input.yaml ' + targetDir, {
       shell: true,
       encoding: 'utf-8'
     })
-    expect(result.stderr, 'Checking stderr-output').to.match(/\s*Invalid number of command-line arguments. 3 arguments expected.*/)
+    expect(result.stderr, 'Checking stderr-output')
+      .to.match(/\s*Invalid number of command-line arguments. 3 arguments expected.*/)
+    expect(result.status === 1, 'Checking exit-code')
+  })
+
+  it('should return with a non-zero exit-code and an error without stack-trace if the source file could not be found', function () {
+    var result = cp.spawnSync('./bin/bootprint.js ./test/fixtures/test-module.js  ./test/fixtures/non-existing-file.yaml ' + targetDir, {
+      shell: true,
+      encoding: 'utf-8'
+    })
+    expect(result.stderr, 'Checking stderr-output')
+      .to.match(/.*no such file or directory.*/)
+    expect(result.stderr, 'stderr should not contain a stack-trace').not.to.match(/throw e/)
+
+    expect(result.status === 1, 'Checking exit-code')
+  })
+
+  it('should return with a non-zero exit-code and an error with stack-trace for unexpected errors', function () {
+    var result = cp.spawnSync('./bin/bootprint.js ./test/fixtures/test-module-error.js  ./test/fixtures/non-existing-file.yaml ' + targetDir, {
+      shell: true,
+      encoding: 'utf-8'
+    })
+    expect(result.stderr, 'stderr should contain a stack-trace').to.match(/throw new Error/)
     expect(result.status === 1, 'Checking exit-code')
   })
 })

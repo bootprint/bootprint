@@ -18,6 +18,11 @@ Customize.prototype.build = function (jsonFile, targetDir) {
   var withData = this.merge({
     handlebars: {
       data: loadFromFileOrHttp(jsonFile)
+        .catch(function (err) {
+          // Augment error for identification in the cli script
+          err.cause = 'bootprint-load-data'
+          throw err
+        })
     }
   })
   return new Bootprint(withData, targetDir)
