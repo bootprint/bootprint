@@ -56,6 +56,7 @@
     "bootprint-swagger": "^0.13.1",
     "chai": "^3.4.0",
     "ghooks": "^1.0.3",
+    "m-io": "^0.1.1",
     "mocha": "^2.3.3",
     "thoughtful-release": "^0.3.0"
   }

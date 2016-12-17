@@ -14,7 +14,10 @@ program.version(_package.version)
   .parse(process.argv)
 
 if (program.args.length !== 3) {
-  program.help()
+  console.error('\n  Invalid number of command-line arguments. 3 arguments expected, ' +
+     program.args.length + ' found: ' + JSON.stringify(program.args) + '.')
+  console.error('  Please run "' + program.name() + ' --help" for a command-line reference.\n')
+  process.exit(1)
 }
 
 // Options from commander
