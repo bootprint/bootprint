@@ -10,6 +10,7 @@ var fs = require('fs')
 var cp = require('child_process')
 // require('trace')
 // require('clarify')
+var Q = require('q')
 process.on('exit', function () {
   var unhandledReasons = require('q').getUnhandledReasons()
   if (unhandledReasons.length > 0) {
@@ -91,47 +92,55 @@ describe('The programmatic interface', function () {
 describe('The CLI interface', function () {
   var targetDir = path.join(tmpDir, 'cli-target')
 
+  function exec (command) {
+    var deferred = Q.defer()
+    cp.exec(command, {encoding: 'utf-8'}, function (err, stdout, stderr) {
+      return deferred.resolve({
+        err: err,
+        stdout: stdout,
+        stderr: stderr
+      })
+    })
+    return deferred.promise
+  }
+
   function outputFile (filename) {
     return fs.readFileSync(path.join(targetDir, filename), {encoding: 'utf-8'}).trim()
   }
 
   it('should run without errors if the correct number of parameters is provided', function () {
-    cp.spawnSync('./bin/bootprint.js ./test/fixtures/test-module.js ./test/fixtures/input.yaml ' + targetDir, {
-      shell: true,
-      encoding: 'utf-8'
-    })
-    expect(outputFile('index.html'), 'Checking index.html').to.equal('eins=ichi zwei=ni drei=san')
-    expect(outputFile('main.css'), 'Checking main.css').to.equal("body{background-color:'#abc'}")
+    return exec('./bin/bootprint.js ./test/fixtures/test-module.js ./test/fixtures/input.yaml ' + targetDir)
+      .then(function (result) {
+        expect(result.err).to.be.null
+        expect(outputFile('index.html'), 'Checking index.html').to.equal('eins=ichi zwei=ni drei=san')
+        expect(outputFile('main.css'), 'Checking main.css').to.equal("body{background-color:'#abc'}")
+      })
   })
 
   it('should return with a non-zero exit-code and an error message if too few parameters are given', function () {
-    var result = cp.spawnSync('./bin/bootprint.js ./test/fixtures/input.yaml ' + targetDir, {
-      shell: true,
-      encoding: 'utf-8'
-    })
-    expect(result.stderr, 'Checking stderr-output')
-      .to.match(/\s*Invalid number of command-line arguments. 3 arguments expected.*/)
-    expect(result.status === 1, 'Checking exit-code')
+    return exec('./bin/bootprint.js ./test/fixtures/input.yaml ' + targetDir)
+      .then(function (result) {
+        expect(result.err).not.to.be.null
+        expect(result.stderr, 'Checking stderr-output')
+          .to.match(/\s*Invalid number of command-line arguments. 3 arguments expected.*/)
+        expect(result.status === 1, 'Checking exit-code')
+      })
   })
 
   it('should return with a non-zero exit-code and an error without stack-trace if the source file could not be found', function () {
-    var result = cp.spawnSync('./bin/bootprint.js ./test/fixtures/test-module.js  ./test/fixtures/non-existing-file.yaml ' + targetDir, {
-      shell: true,
-      encoding: 'utf-8'
-    })
-    expect(result.stderr, 'Checking stderr-output')
-      .to.match(/.*no such file or directory.*/)
-    expect(result.stderr, 'stderr should not contain a stack-trace').not.to.match(/throw e/)
-
-    expect(result.status === 1, 'Checking exit-code')
+    exec('./bin/bootprint.js ./test/fixtures/test-module.js  ./test/fixtures/non-existing-file.yaml ' + targetDir)
+      .then(function (result) {
+        expect(result.stderr, 'Checking stderr-output').to.match(/.*no such file or directory.*/)
+        expect(result.stderr, 'stderr should not contain a stack-trace').not.to.match(/throw/)
+        expect(result.error).not.to.be.null
+      })
   })
 
   it('should return with a non-zero exit-code and an error with stack-trace for unexpected errors', function () {
-    var result = cp.spawnSync('./bin/bootprint.js ./test/fixtures/test-module-error.js  ./test/fixtures/non-existing-file.yaml ' + targetDir, {
-      shell: true,
-      encoding: 'utf-8'
-    })
-    expect(result.stderr, 'stderr should contain a stack-trace').to.match(/throw new Error/)
-    expect(result.status === 1, 'Checking exit-code')
+    exec('./bin/bootprint.js ./test/fixtures/test-module-error.js  ./test/fixtures/non-existing-file.yaml ' + targetDir)
+      .then(function (result) {
+        expect(result.stderr, 'stderr should contain a stack-trace').to.match(/throw new Error/)
+        expect(result.error).not.to.be.null
+      })
   })
 })
