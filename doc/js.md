@@ -57,6 +57,11 @@ Consider th following file-hierarchy:
 ├─┬ partials
 │ ├── body.html.hbs
 │ └── footer.html.hbs
+├─┬ target
+│ ├── bundle.js
+│ ├── index.html
+│ ├── main.css
+│ └── main.css.map
 └─┬ templates
   └── index.html.hbs
 </code></pre>
@@ -82,7 +87,10 @@ require('bootprint')
 This will generate the output:
 
 ```
-[ 'target/index.html', 'target/main.css', 'target/main.css.map' ]
+[ 'target/index.html',
+  'target/main.css',
+  'target/main.css.map',
+  'target/bundle.js' ]
 ```
 
 The output shows the list of generated files. This is useful for post-processors. 

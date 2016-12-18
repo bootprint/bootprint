@@ -1,6 +1,10 @@
 # Release notes
 
 <a name="current-release"></a>
+# Version 0.10.0 (Sun, 18 Dec 2016 14:05:39 GMT)
+
+* [c8fe6b5](https://github.com/bootprint/bootprint/commit/c8fe6b5) Add support for including javascript-files with uglify-js - Nils Knappmeier
+
 # Version 0.9.0 (Sat, 17 Dec 2016 21:59:21 GMT)
 
 * [e61426b](https://github.com/bootprint/bootprint/commit/e61426b) Better error message when source file cannot be found - Nils Knappmeier
