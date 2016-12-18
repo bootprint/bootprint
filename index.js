@@ -10,6 +10,7 @@ var yaml = require('js-yaml')
 module.exports = customize()
   .registerEngine('handlebars', require('customize-engine-handlebars'))
   .registerEngine('less', require('customize-engine-less'))
+  .registerEngine('uglify', require('customize-engine-uglify'))
 
 // Customize type for adding methods
 var Customize = customize.Customize
