@@ -9,7 +9,7 @@
   "preferGlobal": true,
   "scripts": {
     "preformat": "standard --version || npm -g install standard",
-    "format": "standard --format",
+    "format": "standard --fix",
     "pretest": "standard --version || npm -g install standard",
     "test": "mocha --recursive && standard",
     "thought": "thought run -a",
@@ -29,20 +29,19 @@
   },
   "homepage": "https://github.com/bootprint/bootprint",
   "dependencies": {
-    "clarify": "^1.0.5",
     "commander": "^2.6.0",
-    "customize-engine-handlebars": "<1.0.0",
-    "customize-engine-less": "<1.0.0",
-    "customize-engine-uglify": "<1.0.0",
-    "customize-watch": "<1.0.0",
-    "customize-write-files": "<1.0.0",
+    "customize-engine-handlebars": "^1.0.0",
+    "customize-engine-less": "^1.0.0",
+    "customize-engine-uglify": "^1.0.0",
+    "customize-watch": "^1.0.0",
+    "customize-write-files": "^1.0.0",
     "debug": "^2.1.2",
     "get-promise": "^1.3.1",
     "js-yaml": "^3.6.0",
     "live-server": "^0.8.1",
     "lodash": "^3.3.1",
     "q": "^1.4.1",
-    "trace": "^2.0.0"
+    "trace-and-clarify-if-possible": "^1.0.0"
   },
   "files": [
     "index.js",
@@ -50,15 +49,14 @@
   ],
   "config": {
     "ghooks": {
-      "pre-commit": "standard"
+      "pre-push": "standard && thoughtful precommit"
     }
   },
   "devDependencies": {
-    "bootprint-swagger": "^0.13.1",
     "chai": "^3.4.0",
     "ghooks": "^1.0.3",
-    "m-io": "^0.1.1",
+    "m-io": "^0.3.1",
     "mocha": "^2.3.3",
-    "thoughtful-release": "^0.3.0"
+    "thoughtful-release": "^0.3.1"
   }
 }

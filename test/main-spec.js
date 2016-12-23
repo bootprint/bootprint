@@ -8,8 +8,6 @@
 var path = require('path')
 var fs = require('fs')
 var cp = require('child_process')
-// require('trace')
-// require('clarify')
 var Q = require('q')
 process.on('exit', function () {
   var unhandledReasons = require('q').getUnhandledReasons()

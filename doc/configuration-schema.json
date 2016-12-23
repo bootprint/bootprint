@@ -62,86 +62,68 @@
     },
     "less": {
       "description": "The configuration schema of the \"customize-engine-less\"",
-      "definitions": {
-        "stringArray": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
+      "type": "object",
       "properties": {
-        "less": {
-          "type": "object",
-          "properties": {
-            "main": {
-              "description": "A list of imported {less}-files",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "$ref": "#/definitions/stringArray"
-                }
-              ]
+        "main": {
+          "description": "A list of imported {less}-files",
+          "anyOf": [
+            {
+              "type": "string"
             },
-            "paths": {
-              "description": "A list of directories to be used as {less}-include paths",
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "$ref": "#/definitions/stringArray"
-                }
-              ]
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
-          }
+          ]
+        },
+        "paths": {
+          "description": "A list of directories to be used as {less}-include paths",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
         }
       }
     },
     "uglify": {
       "description": "The configuration schema of the \"customize-engine-uglify\"",
-      "definitions": {
-        "stringArray": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
+      "type": "object",
       "properties": {
-        "uglify": {
+        "files": {
+          "description": "A name-path mapping of javascript-files",
+          "additionalProperties": {
+            "type": "string",
+            "description": "The path to the javascript-file. The key of the property is assumed to be the internal name for customize-overrides."
+          }
+        },
+        "dependencies": {
+          "description": "A one-to-multiple mapping of filenames to their dependencies. Both keys and items of the value array must be keys in the \"files\" property. Dependencies of a file will always be included into the bundle before the file itself.",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "description": "The filename of a dependency",
+              "type": "string"
+            }
+          }
+        },
+        "options": {
+          "description": "Options to pass to uglify. (see https://github.com/mishoo/UglifyJS2#api-reference)",
           "type": "object",
           "properties": {
-            "files": {
-              "description": "A name-path mapping of javascript-files",
-              "additionalProperties": {
-                "type": "string",
-                "description": "The path to the javascript-file. The key of the property is assumed to be the internal name for customize-overrides."
-              }
+            "outSourceMap": {
+              "type": "string"
             },
-            "dependencies": {
-              "description": "A one-to-multiple mapping of filenames to their dependencies. Both keys and items of the value array must be keys in the \"files\" property. Dependencies of a file will always be included into the bundle before the file itself.",
-              "additionalProperties": {
-                "type": "array",
-                "items": {
-                  "description": "The filename of a dependency",
-                  "type": "string"
-                }
-              }
-            },
-            "options": {
-              "description": "Options to pass to uglify. (see https://github.com/mishoo/UglifyJS2#api-reference)",
-              "type": "object",
-              "properties": {
-                "outSourceMap": {
-                  "type": "string"
-                },
-                "outFileName": {
-                  "type": "string"
-                }
-              }
+            "outFileName": {
+              "type": "string"
             }
           }
         }

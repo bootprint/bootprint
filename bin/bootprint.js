@@ -81,8 +81,7 @@ function requireTemplateModule (moduleName) {
  */
 function enableLongStack () {
   Error.stackTraceLimit = 100
-  require('trace')
-  require('clarify')
+  require('trace-and-clarify-if-possible')
 }
 
 /**
