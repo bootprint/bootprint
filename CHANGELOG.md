@@ -1,6 +1,10 @@
 # Release notes
 
 <a name="current-release"></a>
+# Version 1.0.1 (Fri, 23 Dec 2016 20:35:00 GMT)
+
+* [824bb17](https://github.com/bootprint/bootprint/commit/824bb17) Update documentation (bootprint-swagger is deprecated) - Nils Knappmeier
+
 # Version 1.0.0 (Fri, 23 Dec 2016 20:22:16 GMT)
 
 * [2d465f5](https://github.com/bootprint/bootprint/commit/2d465f5) Prepare for 1.0 release - Nils Knappmeier
