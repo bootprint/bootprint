@@ -1,7 +1,6 @@
 var customize = require('customize-watch')
 var Q = require('q')
 var write = require('customize-write-files')
-var _ = require('lodash')
 var fs = require('fs')
 var httpGet = require('get-promise')
 var yaml = require('js-yaml')
@@ -64,7 +63,7 @@ function Bootprint (withData, targetDir) {
 function loadFromFileOrHttp (fileOrUrlOrData) {
   // If this is not a string,
   // it is probably already the raw data.
-  if (!_.isString(fileOrUrlOrData)) {
+  if (!typeof fileOrUrlOrData === 'string')) {
     return Q(fileOrUrlOrData)
   }
   // otherwise load data from url or file
