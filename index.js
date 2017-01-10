@@ -63,7 +63,7 @@ function Bootprint (withData, targetDir) {
 function loadFromFileOrHttp (fileOrUrlOrData) {
   // If this is not a string,
   // it is probably already the raw data.
-  if (!typeof fileOrUrlOrData === 'string')) {
+  if (!typeof fileOrUrlOrData === 'string') {
     return Q(fileOrUrlOrData)
   }
   // otherwise load data from url or file
