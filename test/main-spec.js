@@ -5,6 +5,8 @@
  * Released under the MIT license.
  */
 
+/* eslint-env mocha */
+
 var path = require('path')
 var fs = require('fs')
 var cp = require('child_process')
@@ -16,10 +18,9 @@ process.on('exit', function () {
   }
 })
 
-/* global describe */
-/* global it */
-/* global beforeEach */
-var expect = require('chai').expect
+var chai = require('chai')
+chai.use(require('dirty-chai'))
+var expect = chai.expect
 var bootprint = require('../')
 var tmpDir = path.join(__dirname, 'tmp')
 var targetDir = path.join(tmpDir, 'target')
@@ -114,25 +115,25 @@ describe('The CLI interface', function () {
   it('should run without errors if the correct number of parameters is provided', function () {
     return exec('./bin/bootprint.js ./test/fixtures/test-module.js ./test/fixtures/input.yaml ' + targetDir)
       .then(function (result) {
-        expect(result.err).to.be.null
+        expect(result.err).to.be.null()
         expect(outputFile('index.html'), 'Checking index.html').to.equal('eins=ichi zwei=ni drei=san')
 
         expect(outputFile('main.css'), 'Checking main.css')
           .to.equal("body{background-color:'#abc'}/*# sourceMappingURL=main.css.map */")
 
-        expect(outputFile('main.css.map'), 'Source map main.css.map must exist').to.be.ok
+        expect(outputFile('main.css.map'), 'Source map main.css.map must exist').to.be.ok()
 
         expect(outputFile('bundle.js'), 'Checking bundle.js')
           .to.equal('console.log("lib1");\n//# sourceMappingURL=bundle.js.map')
 
-        expect(outputFile('bundle.js.map'), 'Source map bundle.js.map must exist').to.be.ok
+        expect(outputFile('bundle.js.map'), 'Source map bundle.js.map must exist').to.be.ok()
       })
   })
 
   it('should return with a non-zero exit-code and an error message if too few parameters are given', function () {
     return exec('./bin/bootprint.js ./test/fixtures/input.yaml ' + targetDir)
       .then(function (result) {
-        expect(result.err).not.to.be.null
+        expect(result.err).not.to.be.null()
         expect(result.stderr, 'Checking stderr-output')
           .to.match(/\s*Invalid number of command-line arguments. 3 arguments expected.*/)
         expect(result.status === 1, 'Checking exit-code')
@@ -144,7 +145,7 @@ describe('The CLI interface', function () {
       .then(function (result) {
         expect(result.stderr, 'Checking stderr-output').to.match(/.*no such file or directory.*/)
         expect(result.stderr, 'stderr should not contain a stack-trace').not.to.match(/throw/)
-        expect(result.error).not.to.be.null
+        expect(result.error).not.to.be.null()
       })
   })
 
@@ -152,7 +153,7 @@ describe('The CLI interface', function () {
     exec('./bin/bootprint.js ./test/fixtures/test-module-error.js  ./test/fixtures/non-existing-file.yaml ' + targetDir)
       .then(function (result) {
         expect(result.stderr, 'stderr should contain a stack-trace').to.match(/throw new Error/)
-        expect(result.error).not.to.be.null
+        expect(result.error).not.to.be.null()
       })
   })
 })
