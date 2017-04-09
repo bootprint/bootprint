@@ -42,11 +42,6 @@ function run () {
       },
       less: {
         main: require.resolve('./fixtures/main.less')
-      },
-      uglify: {
-        files: {
-          'lib1.js': require.resolve('./fixtures/lib1.js')
-        }
       }
     })
     .build(swaggerJsonFile, targetDir)
@@ -117,16 +112,9 @@ describe('The CLI interface', function () {
       .then(function (result) {
         expect(result.err).to.be.null()
         expect(outputFile('index.html'), 'Checking index.html').to.equal('eins=ichi zwei=ni drei=san')
-
         expect(outputFile('main.css'), 'Checking main.css')
           .to.equal("body{background-color:'#abc'}/*# sourceMappingURL=main.css.map */")
-
         expect(outputFile('main.css.map'), 'Source map main.css.map must exist').to.be.ok()
-
-        expect(outputFile('bundle.js'), 'Checking bundle.js')
-          .to.equal('console.log("lib1");\n//# sourceMappingURL=bundle.js.map')
-
-        expect(outputFile('bundle.js.map'), 'Source map bundle.js.map must exist').to.be.ok()
       })
   })
 

@@ -12,12 +12,6 @@ module.exports = function (builder) {
     },
     less: {
       main: require.resolve('./main.less')
-    },
-    uglify: {
-      files: {
-        'lib1.js': require.resolve('./lib1.js')
-      }
     }
-
   })
 }

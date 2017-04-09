@@ -1,16 +1,14 @@
-var customize = require('customize-watch')
+var customize = require('customize')
 var Q = require('q')
 var write = require('customize-write-files')
-var _ = require('lodash')
 var fs = require('fs')
-var httpGet = require('get-promise')
+var posicle = require('popsicle')
 var yaml = require('js-yaml')
 
 // preconfigured Customize instance.
 module.exports = customize()
   .registerEngine('handlebars', require('customize-engine-handlebars'))
   .registerEngine('less', require('customize-engine-less'))
-  .registerEngine('uglify', require('customize-engine-uglify'))
 
 // Customize type for adding methods
 var Customize = customize.Customize
@@ -42,17 +40,6 @@ function Bootprint (withData, targetDir) {
   this.generate = function generate (options) {
     return withData.run(options).then(write(targetDir))
   }
-
-  /**
-   * Run the file watcher to watch all files loaded into the
-   * current Bootprint-configuration.
-   * The watcher run Bootprint every time one the the input files, templates or helpers changes.
-   * @returns {EventEmitter} an EventEmitter that sends an `update`-event after each
-   *   build, but before the files are written to disc.
-   */
-  this.watch = function () {
-    return withData.watch().on('update', write(targetDir))
-  }
 }
 
 /**
@@ -64,14 +51,13 @@ function Bootprint (withData, targetDir) {
 function loadFromFileOrHttp (fileOrUrlOrData) {
   // If this is not a string,
   // it is probably already the raw data.
-  if (!_.isString(fileOrUrlOrData)) {
+  if (typeof fileOrUrlOrData !== 'string') {
     return Q(fileOrUrlOrData)
   }
   // otherwise load data from url or file
   if (fileOrUrlOrData.match(/^https?:\/\//)) {
     // Use the "request" package to download data
-    return httpGet(fileOrUrlOrData, {
-      redirect: true,
+    return posicle.get(fileOrUrlOrData, {
       headers: {
         'User-Agent': 'Bootprint/' + require('./package').version
       }
@@ -84,7 +70,7 @@ function loadFromFileOrHttp (fileOrUrlOrData) {
       return yaml.safeLoad(result.data, {json: true})
     }, function (error) {
       if (error.status) {
-        throw new Error('Got ' + error.status + ' ' + error.data + ' when requesting ' + error.url, 'E_HTTP')
+        throw new Error(`Got ${error.status} ${error.data} when requesting ${error.url}`, 'E_HTTP')
       } else {
         throw error
       }

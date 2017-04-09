@@ -14,13 +14,12 @@ program.version(_package.version)
   .usage('[options] <module> <jsonFile> <targetdir>')
   .description(_package.description)
   .option('-f, --config-file <file>', 'Specify a config file for custom configurations', loadConfig, {})
-  .option('-d, --development-mode', 'Turn on file-watcher, less source maps and http-server with live-reload')
   .option('-l, --long-stack', 'Turn on long and clarified stack-traces. Requires Node 4 or newer', enableLongStack)
   .parse(process.argv)
 
 if (program.args.length !== 3) {
   stderr('\n  Invalid number of command-line arguments. 3 arguments expected, ' +
-     program.args.length + ' found: ' + JSON.stringify(program.args) + '.')
+    program.args.length + ' found: ' + JSON.stringify(program.args) + '.')
   stderr('  Please run "' + program.name() + ' --help" for a command-line reference.\n')
   process.exit(1)
 }
@@ -37,26 +36,17 @@ var bootprint = require('../index.js')
   .merge(options)
   .build(jsonFile, targetDir)
 
-if (program.developmentMode) {
-  bootprint.watch()
-  var liveServer = require('live-server')
-  var params = {
-    port: 8181,
-    host: '127.0.0.1',
-    root: targetDir,
-    noBrowser: true
-  }
-  liveServer.start(params)
-} else {
-  bootprint.generate().done(stdout, function (error) {
+bootprint.generate().then(
+  stdout,
+  function (error) {
     if (error.cause === 'bootprint-load-data' && error.code === 'ENOENT') {
       // Provide a readable error message (without stack trace) if the source file is missing.
       stderr('\n  ' + error.message + '\n')
     } else {
       throw error
     }
-  })
-}
+  }
+)
 
 /**
  * Load the template module. Try loading "bootprint-`moduleName`" first. If it does not exist
