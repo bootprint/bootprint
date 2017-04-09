@@ -36,8 +36,8 @@
     "customize-write-files": "^2.0.0",
     "debug": "^2.6.3",
     "js-yaml": "^3.8.3",
+    "pify": "^2.3.0",
     "popsicle": "^9.1.0",
-    "q": "^1.5.0",
     "trace-and-clarify-if-possible": "^1.0.0"
   },
   "files": [
@@ -54,8 +54,9 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "istanbul": "^0.4.5",
-    "m-io": "^0.5.0",
+    "mkdirp": "^0.5.1",
     "mocha": "^3.2.0",
+    "rimraf": "^2.6.1",
     "thought": "^1.1.2",
     "thought-plugin-jsdoc": "^1.0.0",
     "thoughtful-release": "^0.3.1",

@@ -10,13 +10,6 @@
 var path = require('path')
 var fs = require('fs')
 var cp = require('child_process')
-var Q = require('q')
-process.on('exit', function () {
-  var unhandledReasons = require('q').getUnhandledReasons()
-  if (unhandledReasons.length > 0) {
-    console.log(unhandledReasons) // eslint-disable-line no-console
-  }
-})
 
 var chai = require('chai')
 chai.use(require('dirty-chai'))
@@ -25,12 +18,14 @@ var bootprint = require('../')
 var tmpDir = path.join(__dirname, 'tmp')
 var targetDir = path.join(tmpDir, 'target')
 var swaggerJsonFile = path.join(tmpDir, 'changing.json')
-var qfs = require('m-io/fs')
+var pify = require('pify')
+var makeTree = pify(require('mkdirp'))
+var removeTree = pify(require('rimraf'))
 
 beforeEach(function () {
-  return qfs.removeTree(tmpDir)
+  return removeTree(tmpDir)
     .then(function () {
-      return qfs.makeTree(tmpDir)
+      return makeTree(tmpDir)
     })
 })
 
@@ -91,16 +86,22 @@ describe('The programmatic interface', function () {
 describe('The CLI interface', function () {
   var targetDir = path.join(tmpDir, 'cli-target')
 
+  /**
+   * Execute a command, but never throw an error. If an error is set,
+   * return it in the result, so that the tests can verify it.
+   * @param command
+   * @returns {Promise}
+   */
   function exec (command) {
-    var deferred = Q.defer()
-    cp.exec(command, {encoding: 'utf-8'}, function (err, stdout, stderr) {
-      return deferred.resolve({
-        err: err,
-        stdout: stdout,
-        stderr: stderr
+    return new Promise((resolve, reject) => {
+      cp.exec(command, {encoding: 'utf-8'}, function (err, stdout, stderr) {
+        return resolve({
+          err: err,
+          stdout: stdout,
+          stderr: stderr
+        })
       })
     })
-    return deferred.promise
   }
 
   function outputFile (filename) {
@@ -113,7 +114,7 @@ describe('The CLI interface', function () {
         expect(result.err).to.be.null()
         expect(outputFile('index.html'), 'Checking index.html').to.equal('eins=ichi zwei=ni drei=san')
         expect(outputFile('main.css'), 'Checking main.css')
-          .to.equal("body{background-color:'#abc'}/*# sourceMappingURL=main.css.map */")
+          .to.equal('body{background-color:\'#abc\'}/*# sourceMappingURL=main.css.map */')
         expect(outputFile('main.css.map'), 'Source map main.css.map must exist').to.be.ok()
       })
   })
@@ -144,4 +145,5 @@ describe('The CLI interface', function () {
         expect(result.error).not.to.be.null()
       })
   })
-})
+}
+)

@@ -2,6 +2,8 @@ var customize = require('customize')
 var Q = require('q')
 var write = require('customize-write-files')
 var fs = require('fs')
+var pify = require('pify')
+var readFile = pify(fs.readFile)
 var posicle = require('popsicle')
 var yaml = require('js-yaml')
 
@@ -76,8 +78,7 @@ function loadFromFileOrHttp (fileOrUrlOrData) {
       }
     })
   } else {
-    return Q.nfcall(fs.readFile, fileOrUrlOrData, 'utf8').then(function (data) {
-      return yaml.safeLoad(data, {json: true})
-    })
+    return readFile(fileOrUrlOrData, 'utf8')
+      .then(data => yaml.safeLoad(data, {json: true}))
   }
 }
