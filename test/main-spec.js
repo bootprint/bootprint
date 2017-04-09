@@ -14,7 +14,7 @@ var Q = require('q')
 process.on('exit', function () {
   var unhandledReasons = require('q').getUnhandledReasons()
   if (unhandledReasons.length > 0) {
-    console.log(unhandledReasons)
+    console.log(unhandledReasons) // eslint-disable-line no-console
   }
 })
 

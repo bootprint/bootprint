@@ -5,6 +5,11 @@ var path = require('path')
 var debug = require('debug')('bootprint:cli')
 var _package = require('../package')
 
+/* eslint-disable no-console */
+var stdout = console.log.bind(console)
+var stderr = console.error.bind(console)
+/* eslint-enable no-console */
+
 program.version(_package.version)
   .usage('[options] <module> <jsonFile> <targetdir>')
   .description(_package.description)
@@ -14,9 +19,9 @@ program.version(_package.version)
   .parse(process.argv)
 
 if (program.args.length !== 3) {
-  console.error('\n  Invalid number of command-line arguments. 3 arguments expected, ' +
+  stderr('\n  Invalid number of command-line arguments. 3 arguments expected, ' +
      program.args.length + ' found: ' + JSON.stringify(program.args) + '.')
-  console.error('  Please run "' + program.name() + ' --help" for a command-line reference.\n')
+  stderr('  Please run "' + program.name() + ' --help" for a command-line reference.\n')
   process.exit(1)
 }
 
@@ -43,10 +48,10 @@ if (program.developmentMode) {
   }
   liveServer.start(params)
 } else {
-  bootprint.generate().done(console.log, function (error) {
+  bootprint.generate().done(stdout, function (error) {
     if (error.cause === 'bootprint-load-data' && error.code === 'ENOENT') {
       // Provide a readable error message (without stack trace) if the source file is missing.
-      console.error('\n  ' + error.message + '\n')
+      stderr('\n  ' + error.message + '\n')
     } else {
       throw error
     }

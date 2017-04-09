@@ -1,4 +1,7 @@
 {
+  "publishConfig": {
+    "tag": "next"
+  },
   "name": "bootprint",
   "version": "1.0.1",
   "description": "Converts json and yaml into a static html page using Handlebars and Bootstrap",
@@ -8,15 +11,12 @@
   },
   "preferGlobal": true,
   "scripts": {
-    "preformat": "standard --version || npm -g install standard",
-    "format": "standard --fix",
-    "pretest": "standard --version || npm -g install standard",
-    "test": "mocha --recursive && standard",
+    "lint": "eslint --fix .",
+    "test": "mocha && npm run lint",
+    "coverage": "istanbul cover ./node_modules/.bin/_mocha",
+    "postcoverage": "istanbul check-coverage coverage/coverage.json --statements 100",
     "thought": "thought run -a",
-    "prethoughtcheck": "thought --version || npm -g install thought",
-    "thoughtcheck": "thought check-engines",
-    "version": "thoughtful changelog -o -a && npm run thought",
-    "preversion": "npm run thoughtcheck"
+    "version": "thoughtful changelog -o -a && npm run thought"
   },
   "repository": {
     "type": "git",
@@ -47,17 +47,20 @@
     "index.js",
     "bin/bootprint.js"
   ],
-  "config": {
-    "ghooks": {
-      "pre-push": "standard && thoughtful precommit"
-    }
-  },
   "devDependencies": {
     "chai": "^3.4.0",
     "dirty-chai": "^1.2.2",
-    "ghooks": "^2.0.0",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^10.2.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "istanbul": "^0.4.5",
     "m-io": "^0.5.0",
     "mocha": "^3.2.0",
+    "thought": "^1.1.2",
+    "thought-plugin-jsdoc": "^1.0.0",
     "thoughtful-release": "^0.3.1"
   }
 }

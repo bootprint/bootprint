@@ -49,20 +49,19 @@ and a template module installed locally.
 Consider th following file-hierarchy:
 
 <pre><code>
-
 ├── content.yaml
 ├── example.js
-├─┬ less
+├─┬ less/
 │ └── main.less
-├─┬ partials
+├─┬ partials/
 │ ├── body.html.hbs
 │ └── footer.html.hbs
-├─┬ target
+├─┬ target/
 │ ├── bundle.js
 │ ├── index.html
 │ ├── main.css
 │ └── main.css.map
-└─┬ templates
+└─┬ templates/
   └── index.html.hbs
 </code></pre>
 
