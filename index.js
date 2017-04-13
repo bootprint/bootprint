@@ -1,84 +1,132 @@
-var customize = require('customize')
-var Q = require('q')
-var write = require('customize-write-files')
-var fs = require('fs')
-var pify = require('pify')
-var readFile = pify(fs.readFile)
-var posicle = require('popsicle')
-var yaml = require('js-yaml')
+const customize = require('customize')
+const path = require('path')
+const debug = require('debug')('bootpring:index')
+const write = require('customize-write-files')
+const pify = require('pify')
+const fs = require('fs')
+const readFile = pify(fs.readFile)
+const yaml = require('js-yaml')
 
-// preconfigured Customize instance.
-module.exports = customize()
-  .registerEngine('handlebars', require('customize-engine-handlebars'))
-  .registerEngine('less', require('customize-engine-less'))
-
-// Customize type for adding methods
-var Customize = customize.Customize
-
-Customize.prototype.build = function (jsonFile, targetDir) {
-  var withData = this.merge({
-    handlebars: {
-      data: loadFromFileOrHttp(jsonFile)
-        .catch(function (err) {
-          // Augment error for identification in the cli script
-          err.cause = 'bootprint-load-data'
-          throw err
-        })
-    }
-  })
-  return new Bootprint(withData, targetDir)
-}
-
-/**
- * The old Bootprint interface
- * @constructor
- */
-function Bootprint (withData, targetDir) {
+module.exports = class Bootprint {
   /**
-   * Run Bootprint and write the result to the specified target directory
-   * @param options {object} options passed to Customize#run()
-   * @returns {Promise} a promise for the completion of the build
+   * Create a new Bootprint-instance
+   *
+   * @param {function(Customize):Customize} customizeModule a customize module (like `require('bootprint-openapi)`)
+   * @param {object} config a customize-configuration to merge after loading the module
    */
-  this.generate = function generate (options) {
-    return withData.run(options).then(write(targetDir))
+  constructor (customizeModule, config) {
+    this.customizeModule = customizeModule
+    this.config = config
+  }
+
+  /**
+   * Run the current engine with a
+   * @param {object|string} input the input data (either the raw data as object, a filename as string or a url (string
+   *  starting with http/https)
+   * @param options
+   */
+  run (input, options) {
+    return customize()
+      .registerEngine('handlebars', require('customize-engine-handlebars'))
+      .registerEngine('less', require('customize-engine-less'))
+      .load(Bootprint.loadModule(this.customizeModule))
+      .merge(this.config || {})
+      .merge({
+        handlebars: {
+          data: Bootprint.loadInput(input)
+            .catch(function (err) {
+              // Augment error for identification in the cli script
+              err.cause = 'bootprint-load-data'
+              throw err
+            })
+        }
+      })
+      .run(options)
+      .then(write(options.targetDir))
+  }
+
+  /**
+   * Load the template module. Try loading "bootprint-`moduleName`" first. If it does not exist
+   * treat "moduleName" as path to the module (relative to the current working dir).
+   * @param moduleName {string} the name of the module to load
+   * @return {function} the builder-function of the loaded module
+   */
+  static loadModule (moduleName) {
+    if (typeof moduleName === 'function') {
+      // This is probably already the module function
+      return moduleName
+    }
+    var modulePath
+    try {
+      modulePath = require.resolve('bootprint-' + moduleName)
+    } catch (e) {
+      if (e.code !== 'MODULE_NOT_FOUND') {
+        throw e
+      }
+      modulePath = path.resolve(moduleName)
+    }
+    debug('Loading module from ', modulePath)
+    return require(moduleName)
+  }
+
+  /**
+   * Helper method for loading the bootprint-data
+   * @param fileOrUrlOrData
+   * @returns {*}
+   */
+  static loadInput (fileOrUrlOrData) {
+    // If this is not a string,
+    // it is probably already the raw data.
+    if (typeof fileOrUrlOrData !== 'string') {
+      return Promise.resolve(fileOrUrlOrData)
+    }
+
+    // Load from url or file
+    return Promise.resolve()
+      .then(() => {
+        if (fileOrUrlOrData.match(/^https?:\/\//)) {
+          return loadUrl(fileOrUrlOrData)
+        } else {
+          return readFile(fileOrUrlOrData, 'utf-8')
+        }
+      })
+      .then((data) => yaml.safeLoad(data, {json: true}))
+      .catch(e => {
+        if (e.code === 'ENOENT') {
+          throw new CouldNotLoadInputError('Input could not be loaded:' + e.message)
+        }
+        throw e
+      })
   }
 }
 
 /**
- * Helper method for loading the bootprint-data
- * @param fileOrUrlOrData
- * @returns {*}
- * @private
+ * Loads data from a URL with proper user agent.
+ * Returns a promise for the response content.
+ * The promise is rejected of the response code indicates an error (400+)
+ * @param {string} url the url to load data from
+ * @access private
  */
-function loadFromFileOrHttp (fileOrUrlOrData) {
-  // If this is not a string,
-  // it is probably already the raw data.
-  if (typeof fileOrUrlOrData !== 'string') {
-    return Q(fileOrUrlOrData)
-  }
-  // otherwise load data from url or file
-  if (fileOrUrlOrData.match(/^https?:\/\//)) {
-    // Use the "request" package to download data
-    return posicle.get(fileOrUrlOrData, {
+function loadUrl (url) {
+  const _package = require('./package')
+  return require('popsicle')
+    .get(url, {
       headers: {
-        'User-Agent': 'Bootprint/' + require('./package').version
-      }
-    }).then(function (result) {
-      if (result.status !== 200) {
-        var error = new Error('HTTP request failed with code ' + result.status)
-        error.result = result
-        throw error
-      }
-      return yaml.safeLoad(result.data, {json: true})
-    }, function (error) {
-      if (error.status) {
-        throw new Error(`Got ${error.status} ${error.data} when requesting ${error.url}`, 'E_HTTP')
-      } else {
-        throw error
+        'User-Agent': `Bootprint/${_package.version}`
       }
     })
-  } else {
-    return readFile(fileOrUrlOrData, 'utf8')
-      .then(data => yaml.safeLoad(data, {json: true}))
+    .use(require('popsicle-status'))
+    .then(response => response.body)
+}
+
+/**
+ * Class for a custom error message without stack-strace
+ */
+class CouldNotLoadInputError extends Error {
+  constructor (message) {
+    super(message)
+    this.stack = ''
   }
 }
+
+module.exports.CouldNotLoadInputError = CouldNotLoadInputError

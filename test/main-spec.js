@@ -14,7 +14,7 @@ var cp = require('child_process')
 var chai = require('chai')
 chai.use(require('dirty-chai'))
 var expect = chai.expect
-var bootprint = require('../')
+var Bootprint = require('../')
 var tmpDir = path.join(__dirname, 'tmp')
 var targetDir = path.join(tmpDir, 'target')
 var swaggerJsonFile = path.join(tmpDir, 'changing.json')
@@ -30,17 +30,14 @@ beforeEach(function () {
 })
 
 function run () {
-  return bootprint
-    .merge({
-      handlebars: {
-        templates: path.join(__dirname, 'fixtures', 'handlebars')
-      },
-      less: {
-        main: require.resolve('./fixtures/main.less')
-      }
-    })
-    .build(swaggerJsonFile, targetDir)
-    .generate()
+  return new Bootprint(a => a, {
+    handlebars: {
+      templates: path.join(__dirname, 'fixtures', 'handlebars')
+    },
+    less: {
+      main: require.resolve('./fixtures/main.less')
+    }
+  }).run(swaggerJsonFile,{targetDir})
 }
 
 describe('The programmatic interface', function () {
@@ -65,17 +62,15 @@ describe('The programmatic interface', function () {
   })
 
   it('should accept yaml as input', function () {
-    return bootprint
-      .merge({
-        handlebars: {
-          templates: path.join(__dirname, 'fixtures', 'handlebars')
-        },
-        less: {
-          main: require.resolve('./fixtures/main.less')
-        }
-      })
-      .build(require.resolve('./fixtures/input.yaml'), targetDir)
-      .generate()
+    return new Bootprint(a => a, {
+      handlebars: {
+        templates: path.join(__dirname, 'fixtures', 'handlebars')
+      },
+      less: {
+        main: require.resolve('./fixtures/main.less')
+      }
+    })
+      .run(require.resolve('./fixtures/input.yaml'), {targetDir})
       .then(function () {
         var content = fs.readFileSync(path.join(targetDir, 'index.html'), {encoding: 'utf-8'})
         return expect(content.trim()).to.equal('eins=ichi zwei=ni drei=san')
@@ -124,7 +119,7 @@ describe('The CLI interface', function () {
       .then(function (result) {
         expect(result.err).not.to.be.null()
         expect(result.stderr, 'Checking stderr-output')
-          .to.match(/\s*Invalid number of command-line arguments. 3 arguments expected.*/)
+          .to.match(/\sUsage:*/)
         expect(result.status === 1, 'Checking exit-code')
       })
   })
