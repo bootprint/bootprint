@@ -29,4 +29,13 @@ if (!(moduleName && input && targetDir)) {
 
 new Bootprint(moduleName, program['configFile'])
   .run(input, {targetDir})
-  .then(stdout, stderr)
+  .then(
+    stdout,
+    (error) => {
+      if (error instanceof Bootprint.CouldNotLoadInputError) {
+        stderr(error.message)
+      } else {
+        stderr(error.toString())
+      }
+    }
+  )

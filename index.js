@@ -34,11 +34,6 @@ module.exports = class Bootprint {
       .merge({
         handlebars: {
           data: Bootprint.loadInput(input)
-            .catch(function (err) {
-              // Augment error for identification in the cli script
-              err.cause = 'bootprint-load-data'
-              throw err
-            })
         }
       })
       .run(options)
@@ -88,15 +83,15 @@ module.exports = class Bootprint {
           return loadUrl(fileOrUrlOrData)
         } else {
           return readFile(fileOrUrlOrData, 'utf-8')
+            .catch(e => {
+              if (e.code === 'ENOENT') {
+                throw new CouldNotLoadInputError(`Input file not found: ${fileOrUrlOrData}`)
+              }
+              throw e
+            })
         }
       })
       .then((data) => yaml.safeLoad(data, {json: true}))
-      .catch(e => {
-        if (e.code === 'ENOENT') {
-          throw new CouldNotLoadInputError('Input could not be loaded:' + e.message)
-        }
-        throw e
-      })
   }
 }
 
@@ -109,24 +104,32 @@ module.exports = class Bootprint {
  */
 function loadUrl (url) {
   const _package = require('./package')
-  return require('popsicle')
+  const popsicle = require('popsicle')
+  return popsicle
     .get(url, {
       headers: {
         'User-Agent': `Bootprint/${_package.version}`
       }
     })
-    .use(require('popsicle-status'))
-    .then(response => response.body)
+    .use(require('popsicle-status')())
+    .then(
+      response => response.body,
+      (e) => {
+        // Throw custom error if the input file could not be loaded, because this will
+        // be presented in the CLI without stack-trace
+        if (e instanceof popsicle.PopsicleError && e.code === 'EINVALIDSTATUS') {
+          throw new CouldNotLoadInputError(e.message)
+        }
+        throw e
+      }
+    )
 }
 
 /**
- * Class for a custom error message without stack-strace
+ * Class for a custom error message for a non-existing input source.
+ * The class is identified in the CLI-script and show without stack-trace
  */
 class CouldNotLoadInputError extends Error {
-  constructor (message) {
-    super(message)
-    this.stack = ''
-  }
 }
 
 module.exports.CouldNotLoadInputError = CouldNotLoadInputError

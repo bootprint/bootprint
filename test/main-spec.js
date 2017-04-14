@@ -13,6 +13,7 @@ var cp = require('child_process')
 
 var chai = require('chai')
 chai.use(require('dirty-chai'))
+chai.use(require('chai-as-promised'))
 var expect = chai.expect
 var Bootprint = require('../')
 var tmpDir = path.join(__dirname, 'tmp')
@@ -21,6 +22,7 @@ var swaggerJsonFile = path.join(tmpDir, 'changing.json')
 var pify = require('pify')
 var makeTree = pify(require('mkdirp'))
 var removeTree = pify(require('rimraf'))
+var nock = require('nock')
 
 beforeEach(function () {
   return removeTree(tmpDir)
@@ -37,7 +39,7 @@ function run () {
     less: {
       main: require.resolve('./fixtures/main.less')
     }
-  }).run(swaggerJsonFile,{targetDir})
+  }).run(swaggerJsonFile, {targetDir})
 }
 
 describe('The programmatic interface', function () {
@@ -84,12 +86,12 @@ describe('The CLI interface', function () {
   /**
    * Execute a command, but never throw an error. If an error is set,
    * return it in the result, so that the tests can verify it.
-   * @param command
+   * @param args the command line arguments passed to the process
    * @returns {Promise}
    */
-  function exec (command) {
+  function execBootprint (...args) {
     return new Promise((resolve, reject) => {
-      cp.exec(command, {encoding: 'utf-8'}, function (err, stdout, stderr) {
+      cp.execFile('./bin/bootprint.js', args, {encoding: 'utf-8'}, function (err, stdout, stderr) {
         return resolve({
           err: err,
           stdout: stdout,
@@ -104,7 +106,7 @@ describe('The CLI interface', function () {
   }
 
   it('should run without errors if the correct number of parameters is provided', function () {
-    return exec('./bin/bootprint.js ./test/fixtures/test-module.js ./test/fixtures/input.yaml ' + targetDir)
+    return execBootprint('./test/fixtures/test-module.js', './test/fixtures/input.yaml', targetDir)
       .then(function (result) {
         expect(result.err).to.be.null()
         expect(outputFile('index.html'), 'Checking index.html').to.equal('eins=ichi zwei=ni drei=san')
@@ -115,7 +117,7 @@ describe('The CLI interface', function () {
   })
 
   it('should return with a non-zero exit-code and an error message if too few parameters are given', function () {
-    return exec('./bin/bootprint.js ./test/fixtures/input.yaml ' + targetDir)
+    return execBootprint('./test/fixtures/input.yaml ', targetDir)
       .then(function (result) {
         expect(result.err).not.to.be.null()
         expect(result.stderr, 'Checking stderr-output')
@@ -124,21 +126,63 @@ describe('The CLI interface', function () {
       })
   })
 
-  it('should return with a non-zero exit-code and an error without stack-trace if the source file could not be found', function () {
-    exec('./bin/bootprint.js ./test/fixtures/test-module.js  ./test/fixtures/non-existing-file.yaml ' + targetDir)
-      .then(function (result) {
-        expect(result.stderr, 'Checking stderr-output').to.match(/.*no such file or directory.*/)
-        expect(result.stderr, 'stderr should not contain a stack-trace').not.to.match(/throw/)
-        expect(result.error).not.to.be.null()
-      })
-  })
+  it('should return with a non-zero exit-code and an error without stack-trace if the source file could not be found',
+    function () {
+      return execBootprint('./test/fixtures/test-module.js', './test/fixtures/non-existing-file.yaml', targetDir)
+        .then(function (result) {
+          expect(result.stderr.trim(), 'Checking stderr-output')
+            .to.equal('Input file not found: ./test/fixtures/non-existing-file.yaml')
+          expect(result.stderr, 'stderr should not contain a stack-trace').not.to.match(/at /)
+          expect(result.error).not.to.be.null()
+        })
+    })
 
   it('should return with a non-zero exit-code and an error with stack-trace for unexpected errors', function () {
-    exec('./bin/bootprint.js ./test/fixtures/test-module-error.js  ./test/fixtures/non-existing-file.yaml ' + targetDir)
+    return execBootprint('./test/fixtures/test-module-error.js', './test/fixtures/non-existing-file.yaml', targetDir)
       .then(function (result) {
         expect(result.stderr, 'stderr should contain a stack-trace').to.match(/throw new Error/)
         expect(result.error).not.to.be.null()
       })
   })
-}
-)
+})
+
+describe('the loadInputFunction', function () {
+  it('should load input from files', function () {
+    return expect(Bootprint.loadInput('./test/fixtures/input.yaml')).to.eventually.deep.equal({
+      'drei': 'san',
+      'eins': 'ichi',
+      'zwei': 'ni'
+    })
+  })
+
+  it('should reject with a custom execption if the input file could not be found', function () {
+    return expect(Bootprint.loadInput('./test/fixtures/non-existing-input.yaml'))
+      .to.be.rejectedWith(Bootprint.CouldNotLoadInputError)
+  })
+
+  it('should load input from http-urls', function () {
+    var mockInput = nock('http://example.com')
+      .get('/swagger.json')
+      .reply(200, {a: 'b'})
+
+    return Bootprint.loadInput('http://example.com/swagger.json')
+      .then(function (input) {
+        expect(mockInput.isDone()).to.be.true()
+        return expect(input).to.deep.equal({
+          a: 'b'
+        })
+      })
+  })
+
+  it('should reject with a custom-execption if the input url return 404', function () {
+    var mockInput = nock('http://example.com')
+      .get('/swagger.json')
+      .reply(404, {a: 'b'})
+
+    return expect(Bootprint.loadInput('http://example.com/swagger.json'))
+      .to.be.rejectedWith(Bootprint.CouldNotLoadInputError)
+      .then(() => mockInput.done())
+
+  })
+
+})
