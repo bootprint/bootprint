@@ -12,9 +12,9 @@
   "preferGlobal": true,
   "scripts": {
     "lint": "eslint --fix .",
-    "test": "mocha && npm run lint",
-    "coverage": "istanbul cover ./node_modules/.bin/_mocha",
-    "postcoverage": "istanbul check-coverage coverage/coverage.json --statements 100",
+    "test": "npm install bootprint-test-module && mocha && npm run lint",
+    "coverage": "rm coverage -rf && npm install bootprint-test-module && istanbul cover ./node_modules/.bin/_mocha --print none",
+    "postcoverage": "istanbul report --root coverage json text-summary lcov && istanbul check-coverage coverage/coverage.json --statements 100",
     "thought": "thought run -a",
     "version": "thoughtful changelog -o -a && npm run thought"
   },
@@ -47,6 +47,7 @@
     "bin/bootprint.js"
   ],
   "devDependencies": {
+    "bootprint-test-module": "file:test/fixtures/bootprint-test-module",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "dirty-chai": "^1.2.2",
