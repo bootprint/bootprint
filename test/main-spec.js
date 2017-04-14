@@ -121,7 +121,7 @@ describe('The CLI interface', function () {
     return new Promise((resolve, reject) => {
       const command = 'istanbul'
       // https://github.com/gotwarlost/istanbul/issues/97
-      const argv = ['cover', 'bin/bootprint.js', '--dir', `./coverage/${name}`, '--print','none', '--'].concat(args)
+      const argv = ['cover', 'bin/bootprint.js', '--dir', `./coverage/${name}`, '--print', 'none', '--'].concat(args)
       cp.execFile(command, argv, {encoding: 'utf-8'}, function (err, stdout, stderr) {
         return resolve({
           err: err,
@@ -137,7 +137,26 @@ describe('The CLI interface', function () {
   }
 
   it('should run without errors if the correct number of parameters is provided', function () {
-    return execBootprint({name: 'noErrors'}, './test/fixtures/test-module.js', './test/fixtures/input.yaml', targetDir)
+    return execBootprint({name: 'noErrors'}, 'test-module', './test/fixtures/input.yaml', targetDir)
+      .then(function (result) {
+        expect(result.err).to.be.null()
+        expect(outputFile('index.html'), 'Checking index.html')
+          .to.equal('bootprint-test-module eins=ichi zwei=ni drei=san')
+        expect(outputFile('main.css'), 'Checking main.css')
+          .to.equal('body{background-color:\'#000\'}/*# sourceMappingURL=main.css.map */')
+        expect(outputFile('main.css.map'), 'Source map main.css.map must exist').to.be.ok()
+      })
+  })
+
+  it('should load a config file, if requested', function () {
+    return execBootprint(
+      {name: 'loadConfigFile'},
+      '-f',
+      './test/fixtures/config-file.js',
+      'test-module',
+      './test/fixtures/input.yaml',
+      targetDir
+    )
       .then(function (result) {
         expect(result.err).to.be.null()
         expect(outputFile('index.html'), 'Checking index.html').to.equal('eins=ichi zwei=ni drei=san')
@@ -147,8 +166,20 @@ describe('The CLI interface', function () {
       })
   })
 
+  it('should show an error if the module could not be loaded correctly', function () {
+    return execBootprint(
+      {name: 'errorOnModuleLoad'},
+      './test/fixtures/test-module-error.js',
+      './test/fixtures/input.yaml',
+      targetDir
+    )
+      .then(function (result) {
+        expect(result.err).to.match(/at.*runMain/)
+      })
+  })
+
   it('should return with a non-zero exit-code and an error message if too few parameters are given', function () {
-    return execBootprint({name: 'toFewParams'}, './test/fixtures/input.yaml ', targetDir)
+    return execBootprint({name: 'tooFewParams'}, './test/fixtures/input.yaml ', targetDir)
       .then(function (result) {
         expect(result.err).not.to.be.null()
         expect(result.stderr, 'Checking stderr-output')
