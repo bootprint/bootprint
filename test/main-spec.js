@@ -180,9 +180,27 @@ describe('the loadInputFunction', function () {
       .reply(404, {a: 'b'})
 
     return expect(Bootprint.loadInput('http://example.com/swagger.json'))
-      .to.be.rejectedWith(Bootprint.CouldNotLoadInputError)
+      .to.be.rejectedWith(Bootprint.CouldNotLoadInputError, /404/)
       .then(() => mockInput.done())
-
   })
 
+  it('should reject with a custom-execption if the input url return 403', function () {
+    var mockInput = nock('http://example.com')
+      .get('/swagger.json')
+      .reply(403, {a: 'b'})
+
+    return expect(Bootprint.loadInput('http://example.com/swagger.json'))
+      .to.be.rejectedWith(Bootprint.CouldNotLoadInputError, /403/)
+      .then(() => mockInput.done())
+  })
+
+  it('should reject with a custom-execption if another error occurs while ', function () {
+    var mockInput = nock('http://example.com')
+      .get('/swagger.json')
+      .replyWithError('something awful happened')
+
+    return expect(Bootprint.loadInput('http://example.com/swagger.json'))
+      .to.be.rejectedWith(Bootprint.CouldNotLoadInputError, 'something awful happened')
+      .then(() => mockInput.done())
+  })
 })

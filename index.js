@@ -55,13 +55,14 @@ module.exports = class Bootprint {
     try {
       modulePath = require.resolve('bootprint-' + moduleName)
     } catch (e) {
+      // istanbul ignore if: Not reproducible, this statement is just for safety
       if (e.code !== 'MODULE_NOT_FOUND') {
         throw e
       }
       modulePath = path.resolve(moduleName)
     }
     debug('Loading module from ', modulePath)
-    return require(moduleName)
+    return require(modulePath)
   }
 
   /**
@@ -83,13 +84,12 @@ module.exports = class Bootprint {
           return loadUrl(fileOrUrlOrData)
         } else {
           return readFile(fileOrUrlOrData, 'utf-8')
-            .catch(e => {
-              if (e.code === 'ENOENT') {
-                throw new CouldNotLoadInputError(`Input file not found: ${fileOrUrlOrData}`)
-              }
-              throw e
-            })
         }
+      })
+      .catch((error) => {
+        // Throw custom error if the input file could not be loaded, because this will
+        // be presented in the CLI without stack-trace
+        throw new CouldNotLoadInputError(error.toString())
       })
       .then((data) => yaml.safeLoad(data, {json: true}))
   }
@@ -112,17 +112,7 @@ function loadUrl (url) {
       }
     })
     .use(require('popsicle-status')())
-    .then(
-      response => response.body,
-      (e) => {
-        // Throw custom error if the input file could not be loaded, because this will
-        // be presented in the CLI without stack-trace
-        if (e instanceof popsicle.PopsicleError && e.code === 'EINVALIDSTATUS') {
-          throw new CouldNotLoadInputError(e.message)
-        }
-        throw e
-      }
-    )
+    .then(response => response.body)
 }
 
 /**
