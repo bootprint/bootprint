@@ -13,8 +13,8 @@
   "scripts": {
     "lint": "eslint --fix .",
     "test": "npm install bootprint-test-module && mocha && npm run lint",
-    "coverage": "rm coverage -rf && npm install bootprint-test-module && istanbul cover ./node_modules/.bin/_mocha --print none",
-    "postcoverage": "istanbul report --root coverage json text-summary lcov && istanbul check-coverage coverage/coverage.json --statements 100",
+    "coverage": "rm coverage -rf && npm install bootprint-test-module && istanbul cover --dir coverage/mocha ./node_modules/.bin/_mocha --print none",
+    "postcoverage": "istanbul report --root coverage text-summary html  && istanbul check-coverage --statements 100",
     "thought": "thought run -a",
     "version": "thoughtful changelog -o -a && npm run thought"
   },

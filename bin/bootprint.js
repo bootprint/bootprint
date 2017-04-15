@@ -35,7 +35,7 @@ new Bootprint(moduleName, program['configFile'])
       if (error instanceof Bootprint.CouldNotLoadInputError) {
         stderr(error.message)
       } else {
-        stderr(error.toString())
+        stderr(error)
       }
     }
   )

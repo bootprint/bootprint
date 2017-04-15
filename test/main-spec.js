@@ -199,9 +199,17 @@ describe('The CLI interface', function () {
   })
 
   it('should return with a non-zero exit-code and an error with stack-trace for unexpected errors', function () {
-    return execBootprint({name: 'unexpectedError'}, './test/fixtures/test-module-error.js', './test/fixtures/non-existing-file.yaml', targetDir)
+    return execBootprint({name: 'unexpectedError'}, './test/fixtures/test-module-error.js', './test/fixtures/input.yaml', targetDir)
       .then(function (result) {
         expect(result.stderr, 'stderr should contain a stack-trace').to.match(/throw new Error/)
+        expect(result.error).not.to.be.null()
+      })
+  })
+
+  it('should return with a non-zero exit-code and an error with stack-trace for unexpected errors (async errors)', function () {
+    return execBootprint({name: 'unexpectedAsyncError'}, './test/fixtures/test-module-async-error.js', './test/fixtures/input.yaml', targetDir)
+      .then(function (result) {
+        expect(result.stderr, 'stderr should contain a stack-trace').to.match(/at Object.preprocessor/)
         expect(result.error).not.to.be.null()
       })
   })
