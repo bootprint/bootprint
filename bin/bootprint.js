@@ -3,7 +3,7 @@
 var program = require('commander')
 var _package = require('../package')
 var path = require('path')
-var Bootprint = require('../index.js')
+var {Bootprint, CouldNotLoadInputError} = require('../index.js')
 
 /* eslint-disable no-console */
 var stdout = console.log.bind(console)
@@ -11,7 +11,7 @@ var stderr = console.error.bind(console)
 /* eslint-enable no-console */
 
 program.version(_package.version)
-  .usage('[options] <module> <inputFileOrUrl> <targetdir>')
+  .usage('[options] <module> <inputFileOrUrl> <targetDir>')
   .description(_package.description)
   .option(
     '-f, --config-file <file>',
@@ -32,7 +32,7 @@ new Bootprint(moduleName, program['configFile'])
   .then(
     stdout,
     (error) => {
-      if (error instanceof Bootprint.CouldNotLoadInputError) {
+      if (error instanceof CouldNotLoadInputError) {
         stderr(error.message)
       } else {
         stderr(error)

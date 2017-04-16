@@ -39,8 +39,7 @@
     "pify": "^2.3.0",
     "popsicle": "^9.1.0",
     "popsicle-proxy-agent": "^3.0.0",
-    "popsicle-status": "^2.0.0",
-    "trace-and-clarify-if-possible": "^1.0.0"
+    "popsicle-status": "^2.0.0"
   },
   "files": [
     "index.js",

@@ -68,28 +68,25 @@ Consider th following file-hierarchy:
 The following code demonstrates the usage of the `.merge`-function without loading any module:
 
 ```js
-require('bootprint')
-  .merge({
-    handlebars: {
-      templates: 'templates',
-      partials: 'partials'
-    },
-    less: {
-      main: 'less/main.less'
-    }
-  })
-  .build('content.yaml', 'target')
-  .generate()
-  .done(console.log)
+var {Bootprint} = require('bootprint')
+
+new Bootprint(a => a, {
+  handlebars: {
+    templates: 'templates',
+    partials: 'partials'
+  },
+  less: {
+    main: 'less/main.less'
+  }
+})
+  .run('content.yaml', 'target')
+  .then(console.log)
 ```
 
 This will generate the output:
 
 ```
-[ 'target/index.html',
-  'target/main.css',
-  'target/main.css.map',
-  'target/bundle.js' ]
+
 ```
 
 The output shows the list of generated files. This is useful for post-processors. 

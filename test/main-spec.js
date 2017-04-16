@@ -15,7 +15,7 @@ var chai = require('chai')
 chai.use(require('dirty-chai'))
 chai.use(require('chai-as-promised'))
 var expect = chai.expect
-var Bootprint = require('../')
+var {Bootprint, CouldNotLoadInputError} = require('../')
 var tmpDir = path.join(__dirname, 'tmp')
 var targetDir = path.join(tmpDir, 'target')
 var pify = require('pify')
@@ -226,7 +226,7 @@ describe('the loadInputFunction', function () {
 
   it('should reject with a custom execption if the input file could not be found', function () {
     return expect(Bootprint.loadInput('./test/fixtures/non-existing-input.yaml'))
-      .to.be.rejectedWith(Bootprint.CouldNotLoadInputError)
+      .to.be.rejectedWith(CouldNotLoadInputError)
   })
 
   it('should load input from http-urls', function () {
@@ -249,7 +249,7 @@ describe('the loadInputFunction', function () {
       .reply(404, {a: 'b'})
 
     return expect(Bootprint.loadInput('http://example.com/swagger.json'))
-      .to.be.rejectedWith(Bootprint.CouldNotLoadInputError, /404/)
+      .to.be.rejectedWith(CouldNotLoadInputError, /404/)
       .then(() => mockInput.done())
   })
 
@@ -259,7 +259,7 @@ describe('the loadInputFunction', function () {
       .reply(403, {a: 'b'})
 
     return expect(Bootprint.loadInput('http://example.com/swagger.json'))
-      .to.be.rejectedWith(Bootprint.CouldNotLoadInputError, /403/)
+      .to.be.rejectedWith(CouldNotLoadInputError, /403/)
       .then(() => mockInput.done())
   })
 
@@ -269,7 +269,7 @@ describe('the loadInputFunction', function () {
       .replyWithError('something awful happened')
 
     return expect(Bootprint.loadInput('http://example.com/swagger.json'))
-      .to.be.rejectedWith(Bootprint.CouldNotLoadInputError, 'something awful happened')
+      .to.be.rejectedWith(CouldNotLoadInputError, 'something awful happened')
       .then(() => mockInput.done())
   })
 })

@@ -6,8 +6,14 @@ const pify = require('pify')
 const fs = require('fs')
 const readFile = pify(fs.readFile)
 const yaml = require('js-yaml')
+const bootprintCustomize = customize()
+  .registerEngine('handlebars', require('customize-engine-handlebars'))
+  .registerEngine('less', require('customize-engine-less'))
 
-module.exports = class Bootprint {
+/**
+ * @access public
+ */
+class Bootprint {
   /**
    * Create a new Bootprint-instance
    *
@@ -26,9 +32,7 @@ module.exports = class Bootprint {
    * @param options
    */
   run (input, options) {
-    return customize()
-      .registerEngine('handlebars', require('customize-engine-handlebars'))
-      .registerEngine('less', require('customize-engine-less'))
+    return bootprintCustomize
       .load(Bootprint.loadModule(this.customizeModule))
       .merge(this.config || {})
       .merge({
@@ -93,6 +97,10 @@ module.exports = class Bootprint {
       })
       .then((data) => yaml.safeLoad(data, {json: true}))
   }
+
+  static configSchema () {
+    return bootprintCustomize.configSchema()
+  }
 }
 
 /**
@@ -122,4 +130,4 @@ function loadUrl (url) {
 class CouldNotLoadInputError extends Error {
 }
 
-module.exports.CouldNotLoadInputError = CouldNotLoadInputError
+module.exports = {Bootprint, CouldNotLoadInputError}
