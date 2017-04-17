@@ -50,7 +50,7 @@ var defaultConfig = {
 }
 
 function run (module, config, input) {
-  return new Bootprint(module, config).run(input, {targetDir})
+  return new Bootprint(module, config).run(input, targetDir)
 }
 
 describe('The JavaScript interface', function () {
@@ -100,7 +100,7 @@ describe('The JavaScript interface', function () {
         main: require.resolve('./fixtures/main.less')
       }
     })
-      .run(require.resolve('./fixtures/input.yaml'), {targetDir})
+      .run(require.resolve('./fixtures/input.yaml'), targetDir)
       .then(function () {
         var content = fs.readFileSync(path.join(targetDir, 'index.html'), {encoding: 'utf-8'})
         return expect(content.trim()).to.equal('eins=ichi zwei=ni drei=san')

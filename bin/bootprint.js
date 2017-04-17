@@ -28,7 +28,7 @@ if (!(moduleName && input && targetDir)) {
 }
 
 new Bootprint(moduleName, program['configFile'])
-  .run(input, {targetDir})
+  .run(input, targetDir)
   .then(
     stdout,
     (error) => {

@@ -2,11 +2,11 @@
 
 
 When using Bootprint from the command line, you can provide a file with configuration options. 
-The configuration options override the default-options of the module that you specify in the **&lt;spec>** 
+The configuration options override the default-options of the module that you specify in the **&lt;module>** 
 command-line-parameter. This means, by providing a config-file, you can alter the behaviour defined in this module. 
 You can provide alternative styles or different contents.
 
-The configuration file is a JavaScript file that exports an object matching 
+The configuration file is a JavaScript-file that exports an object matching 
 [this extended JSON-schema](./configuration-schema.json).
 
 When using Bootprint's JavaScript-API, the same format can be passed to the

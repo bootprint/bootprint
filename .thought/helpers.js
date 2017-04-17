@@ -1,4 +1,4 @@
-const {Bootprint} = require('../')
+const {bootprintCustomize} = require('../')
 
 module.exports = {
 
@@ -6,7 +6,7 @@ module.exports = {
    * Returns the configuration schema of the Booptrint (as formatted JSON-string)
    */
   'configuration-schema': function () {
-    var config = Bootprint.configSchema()
+    var config = bootprintCustomize.configSchema()
     return JSON.stringify(config, null, 2)
   }
 }

@@ -9,11 +9,12 @@ const yaml = require('js-yaml')
 const bootprintCustomize = customize()
   .registerEngine('handlebars', require('customize-engine-handlebars'))
   .registerEngine('less', require('customize-engine-less'))
+const EventEmitter = require('events')
 
 /**
  * @access public
  */
-class Bootprint {
+class Bootprint extends EventEmitter {
   /**
    * Create a new Bootprint-instance
    *
@@ -21,6 +22,7 @@ class Bootprint {
    * @param {object} config a customize-configuration to merge after loading the module
    */
   constructor (customizeModule, config) {
+    super()
     this.customizeModule = customizeModule
     this.config = config
   }
@@ -29,9 +31,12 @@ class Bootprint {
    * Run the current engine with a
    * @param {object|string} input the input data (either the raw data as object, a filename as string or a url (string
    *  starting with http/https)
-   * @param options
+   * @param {string} targetDir
+   * @param {object} options
+   * @param {string} options.engineOnly only run a single customize-engine by its name (handlebars or less)
    */
-  run (input, options) {
+  run (input, targetDir, options) {
+    // Prepare customize instance for this run
     return bootprintCustomize
       .load(Bootprint.loadModule(this.customizeModule))
       .merge(this.config || {})
@@ -40,8 +45,8 @@ class Bootprint {
           data: Bootprint.loadInput(input)
         }
       })
-      .run(options)
-      .then(write(options.targetDir))
+      .run({engineOnly: options && options.engineOnly})
+      .then(write(targetDir))
   }
 
   /**
@@ -75,21 +80,19 @@ class Bootprint {
    * @returns {*}
    */
   static loadInput (fileOrUrlOrData) {
-    // If this is not a string,
-    // it is probably already the raw data.
-    if (typeof fileOrUrlOrData !== 'string') {
-      return Promise.resolve(fileOrUrlOrData)
+    var dataAsString
+    switch (Bootprint.kindOfInput(fileOrUrlOrData)) {
+      case 'data':
+        // Return the raw data if it is data
+        return Promise.resolve(fileOrUrlOrData)
+      case 'url':
+        dataAsString = loadUrl(fileOrUrlOrData)
+        break
+      case 'file':
+        dataAsString = readFile(fileOrUrlOrData, 'utf-8')
+        break
     }
-
-    // Load from url or file
-    return Promise.resolve()
-      .then(() => {
-        if (fileOrUrlOrData.match(/^https?:\/\//)) {
-          return loadUrl(fileOrUrlOrData)
-        } else {
-          return readFile(fileOrUrlOrData, 'utf-8')
-        }
-      })
+    return dataAsString
       .catch((error) => {
         // Throw custom error if the input file could not be loaded, because this will
         // be presented in the CLI without stack-trace
@@ -98,8 +101,21 @@ class Bootprint {
       .then((data) => yaml.safeLoad(data, {json: true}))
   }
 
-  static configSchema () {
-    return bootprintCustomize.configSchema()
+  /**
+   * Returns 'data', 'url' or 'file' dependending on what kind of input t
+   * the parameter is
+   * @param fileOrUrlOrData
+   */
+  static kindOfInput (fileOrUrlOrData) {
+    // If this is not a string,
+    // it is probably already the raw data.
+    if (typeof fileOrUrlOrData !== 'string') {
+      return 'data'
+    }
+    if (fileOrUrlOrData.match(/^https?:\/\//)) {
+      return 'url'
+    }
+    return 'file'
   }
 }
 
@@ -130,4 +146,4 @@ function loadUrl (url) {
 class CouldNotLoadInputError extends Error {
 }
 
-module.exports = {Bootprint, CouldNotLoadInputError}
+module.exports = {Bootprint, CouldNotLoadInputError, bootprintCustomize}
