@@ -6,9 +6,6 @@ const pify = require('pify')
 const fs = require('fs')
 const readFile = pify(fs.readFile)
 const yaml = require('js-yaml')
-const bootprintCustomize = customize()
-  .registerEngine('handlebars', require('customize-engine-handlebars'))
-  .registerEngine('less', require('customize-engine-less'))
 const EventEmitter = require('events')
 
 /**
@@ -32,12 +29,14 @@ class Bootprint extends EventEmitter {
    * @param {object|string} input the input data (either the raw data as object, a filename as string or a url (string
    *  starting with http/https)
    * @param {string} targetDir
-   * @param {object} options
-   * @param {string} options.engineOnly only run a single customize-engine by its name (handlebars or less)
+   * @param {object=} options
+   * @param {string} options.onlyEngine only run a single customize-engine by its name (handlebars or less)
    */
   run (input, targetDir, options) {
     // Prepare customize instance for this run
-    return bootprintCustomize
+    const customizeInstance = customize()
+      .registerEngine('handlebars', require('customize-engine-handlebars'))
+      .registerEngine('less', require('customize-engine-less'))
       .load(Bootprint.loadModule(this.customizeModule))
       .merge(this.config || {})
       .merge({
@@ -45,8 +44,15 @@ class Bootprint extends EventEmitter {
           data: Bootprint.loadInput(input)
         }
       })
-      .run({engineOnly: options && options.engineOnly})
-      .then(write(targetDir))
+    // Determine watched files and emit the event
+    // and run Customize in parallel
+    return Promise.all([
+      customizeInstance
+        .run({onlyEngine: options && options.onlyEngine})
+        .then(write(targetDir)),
+      customizeInstance.watched()
+        .then((watchFiles) => this.emit('running', {input, targetDir, watchFiles}))
+    ]).then((args) => args[0])
   }
 
   /**
@@ -143,7 +149,8 @@ function loadUrl (url) {
  * Class for a custom error message for a non-existing input source.
  * The class is identified in the CLI-script and show without stack-trace
  */
-class CouldNotLoadInputError extends Error {
+class CouldNotLoadInputError
+  extends Error {
 }
 
-module.exports = {Bootprint, CouldNotLoadInputError, bootprintCustomize}
+module.exports = {Bootprint, CouldNotLoadInputError}

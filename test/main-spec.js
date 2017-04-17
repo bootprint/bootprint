@@ -9,7 +9,6 @@
 
 var path = require('path')
 var fs = require('fs')
-var cp = require('child_process')
 
 var chai = require('chai')
 chai.use(require('dirty-chai'))
@@ -22,13 +21,6 @@ var pify = require('pify')
 var makeTree = pify(require('mkdirp'))
 var removeTree = pify(require('rimraf'))
 var nock = require('nock')
-
-beforeEach(function () {
-  return removeTree(tmpDir)
-    .then(function () {
-      return makeTree(tmpDir)
-    })
-})
 
 /**
  * Function to sync-read files from the targetDir.
@@ -54,12 +46,20 @@ function run (module, config, input) {
 }
 
 describe('The JavaScript interface', function () {
+  beforeEach(function () {
+    return removeTree(tmpDir)
+      .then(function () {
+        return makeTree(tmpDir)
+      })
+  })
+
   it('should load a module via its name without bootprint-prefix', function () {
     return Promise.resolve()
       .then(() => run('test-module', undefined, {
         eins: 'one', zwei: 'two', drei: 'three'
       }))
       .then(() => {
+        expect(fs.readdirSync(targetDir)).to.deep.equal(['index.html', 'index.xml', 'main.css', 'main.css.map'])
         expect(readResult('index.html')).to.equal('bootprint-test-module eins=one zwei=two drei=three')
         expect(readResult('index.xml')).to.equal('<body eins="one" zwei="two" drei="three"></body>')
       })
@@ -106,111 +106,49 @@ describe('The JavaScript interface', function () {
         return expect(content.trim()).to.equal('eins=ichi zwei=ni drei=san')
       })
   })
-})
 
-describe('The CLI interface', function () {
-  var targetDir = path.join(tmpDir, 'cli-target')
-
-  /**
-   * Execute a command, but never throw an error. If an error is set,
-   * return it in the result, so that the tests can verify it.
-   * @param args the command line arguments passed to the process
-   * @returns {Promise}
-   */
-  function execBootprint ({name}, ...args) {
-    return new Promise((resolve, reject) => {
-      const command = 'istanbul'
-      // https://github.com/gotwarlost/istanbul/issues/97
-      const argv = ['cover', 'bin/bootprint.js', '--dir', `./coverage/${name}`, '--print', 'none', '--'].concat(args)
-      cp.execFile(command, argv, {encoding: 'utf-8'}, function (err, stdout, stderr) {
-        return resolve({
-          err: err,
-          stdout: stdout,
-          stderr: stderr
-        })
+  it('should run only a single engine if onlyEngine is specified', function () {
+    return Promise.resolve()
+      .then(
+        () => new Bootprint('test-module', undefined)
+          .run({
+            eins: 'one', zwei: 'two', drei: 'three'
+          }, targetDir, {onlyEngine: 'handlebars'})
+      )
+      .then(() => {
+        expect(fs.readdirSync(targetDir)).to.deep.equal(['index.html', 'index.xml'])
+        expect(readResult('index.html')).to.equal('bootprint-test-module eins=one zwei=two drei=three')
+        expect(readResult('index.xml')).to.equal('<body eins="one" zwei="two" drei="three"></body>')
       })
+  })
+
+  it('should emit a "running"-event"', function () {
+    let event
+    let bootprint = new Bootprint(a => a, {
+      handlebars: {
+        templates: path.join(__dirname, 'fixtures', 'handlebars')
+      },
+      less: {
+        main: require.resolve('./fixtures/main.less')
+      }
     })
-  }
 
-  function outputFile (filename) {
-    return fs.readFileSync(path.join(targetDir, filename), {encoding: 'utf-8'}).trim()
-  }
+    bootprint.on('running', watched => { event = watched })
+    return bootprint
+      .run(require.resolve('./fixtures/input.yaml'), targetDir)
+      .then(function () {
+        expect(event.input, 'Checking input').to.deep.equal(require.resolve('./fixtures/input.yaml'))
+        expect(event.targetDir, 'Checking targetDir').to.equal(targetDir)
 
-  it('should run without errors if the correct number of parameters is provided', function () {
-    return execBootprint({name: 'noErrors'}, 'test-module', './test/fixtures/input.yaml', targetDir)
-      .then(function (result) {
-        expect(result.err).to.be.null()
-        expect(outputFile('index.html'), 'Checking index.html')
-          .to.equal('bootprint-test-module eins=ichi zwei=ni drei=san')
-        expect(outputFile('main.css'), 'Checking main.css')
-          .to.equal('body{background-color:\'#000\'}/*# sourceMappingURL=main.css.map */')
-        expect(outputFile('main.css.map'), 'Source map main.css.map must exist').to.be.ok()
-      })
-  })
+        var watchHbs = event.watchFiles.handlebars.map((file) => path.relative('.', file))
+        expect(watchHbs, 'Checking handlebars files').to.deep.equal([
+          'test/fixtures/handlebars'
+        ])
 
-  it('should load a config file, if requested', function () {
-    return execBootprint(
-      {name: 'loadConfigFile'},
-      '-f',
-      './test/fixtures/config-file.js',
-      'test-module',
-      './test/fixtures/input.yaml',
-      targetDir
-    )
-      .then(function (result) {
-        expect(result.err).to.be.null()
-        expect(outputFile('index.html'), 'Checking index.html').to.equal('eins=ichi zwei=ni drei=san')
-        expect(outputFile('main.css'), 'Checking main.css')
-          .to.equal('body{background-color:\'#abc\'}/*# sourceMappingURL=main.css.map */')
-        expect(outputFile('main.css.map'), 'Source map main.css.map must exist').to.be.ok()
-      })
-  })
-
-  it('should show an error if the module could not be loaded correctly', function () {
-    return execBootprint(
-      {name: 'errorOnModuleLoad'},
-      './test/fixtures/test-module-error.js',
-      './test/fixtures/input.yaml',
-      targetDir
-    )
-      .then(function (result) {
-        expect(result.err).to.match(/at.*runMain/)
-      })
-  })
-
-  it('should return with a non-zero exit-code and an error message if too few parameters are given', function () {
-    return execBootprint({name: 'tooFewParams'}, './test/fixtures/input.yaml ', targetDir)
-      .then(function (result) {
-        expect(result.err).not.to.be.null()
-        expect(result.stderr, 'Checking stderr-output')
-          .to.match(/Usage:*/)
-        expect(result.status === 1, 'Checking exit-code')
-      })
-  })
-
-  it('should return with a non-zero exit-code and without stack-trace if the source file could not be found', function () {
-    return execBootprint({name: 'sourceFileNotFound'}, './test/fixtures/test-module.js', './test/fixtures/non-existing-file.yaml', targetDir)
-      .then(function (result) {
-        expect(result.stderr.trim(), 'Checking stderr-output')
-          .to.equal('Error: ENOENT: no such file or directory, open \'./test/fixtures/non-existing-file.yaml\'')
-        expect(result.stderr, 'stderr should not contain a stack-trace').not.to.match(/at /)
-        expect(result.error).not.to.be.null()
-      })
-  })
-
-  it('should return with a non-zero exit-code and an error with stack-trace for unexpected errors', function () {
-    return execBootprint({name: 'unexpectedError'}, './test/fixtures/test-module-error.js', './test/fixtures/input.yaml', targetDir)
-      .then(function (result) {
-        expect(result.stderr, 'stderr should contain a stack-trace').to.match(/throw new Error/)
-        expect(result.error).not.to.be.null()
-      })
-  })
-
-  it('should return with a non-zero exit-code and an error with stack-trace for unexpected errors (async errors)', function () {
-    return execBootprint({name: 'unexpectedAsyncError'}, './test/fixtures/test-module-async-error.js', './test/fixtures/input.yaml', targetDir)
-      .then(function (result) {
-        expect(result.stderr, 'stderr should contain a stack-trace').to.match(/at Object.preprocessor/)
-        expect(result.error).not.to.be.null()
+        var watchLess = event.watchFiles.less.map((file) => path.relative('.', file))
+        expect(watchLess, 'Checking less files').to.deep.equal([
+          'test/fixtures/main.less'
+        ])
       })
   })
 })
@@ -272,20 +210,20 @@ describe('the loadInputFunction', function () {
       .to.be.rejectedWith(CouldNotLoadInputError, 'something awful happened')
       .then(() => mockInput.done())
   })
-})
 
-describe('the "loadModule"-function', function () {
-  it('should load a module by prefix the name with "bootprint"', function () {
-    expect(Bootprint.loadModule('test-module').package.name).to.equal('bootprint-test-module')
-  })
+  describe('the "loadModule"-function', function () {
+    it('should load a module by prefix the name with "bootprint"', function () {
+      expect(Bootprint.loadModule('test-module').package.name).to.equal('bootprint-test-module')
+    })
 
-  it('should load a module as fallback through the complete path', function () {
-    expect(Bootprint.loadModule('./test/fixtures/bootprint-test-module').package.name)
-      .to.equal('bootprint-test-module')
-  })
+    it('should load a module as fallback through the complete path', function () {
+      expect(Bootprint.loadModule('./test/fixtures/bootprint-test-module').package.name)
+        .to.equal('bootprint-test-module')
+    })
 
-  it('should throw  a module as fallback through the complete path', function () {
-    expect(Bootprint.loadModule('./test/fixtures/bootprint-test-module').package.name)
-      .to.equal('bootprint-test-module')
+    it('should throw  a module as fallback through the complete path', function () {
+      expect(Bootprint.loadModule('./test/fixtures/bootprint-test-module').package.name)
+        .to.equal('bootprint-test-module')
+    })
   })
 })
