@@ -3,7 +3,7 @@
     "tag": "next"
   },
   "name": "bootprint",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Converts json and yaml into a static html page using Handlebars and Bootstrap",
   "main": "index.js",
   "bin": {

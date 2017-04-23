@@ -1,6 +1,46 @@
 # Release notes
 
 <a name="current-release"></a>
+# Version 2.0.0 (Sun, 23 Apr 2017 14:47:57 GMT)
+
+## Breaking changes
+
+* **customize-engine-uglify was removed from default-engines**: [bootprint-openapi#86](https://github.com/bootprint/bootprint-openapi/issues/86) 
+  revealed that the JavaScript-files generated and included by bootprint@1.0.x are basically useless.
+  They were added in order to add interactive-features, but that has never been done.
+  In version 2.x, the generation of JavaScript-files is removed again. It might be added in `bootprint-openapi`
+  or another module, when there are feature that they are needed for.
+
+* **Change in the JavaScript-API**: The JavaScript-API of bootprint@0.x was developed in order to be able to customize 
+  input and configuration values. This functionality was then extracted into the Customize project. In bootprint@1.x
+  the API was kept compatible. The new API is now totally different and designed for the needs of the command-line interface.
+  As a result, if only allows one module and one configuration file.
+  The use of the JavaScript-API is deprecated. If you need and this API, you can use the packages `customize`, `customize-engine-handlebars`
+  and `customize-engine-less` directly. The use can (i.e. will be) found in the documentation of this package.
+
+* **Drop support for older versions of NodeJS**: From version 2.0 on, only NodeJS 6.x and NodeJS 7.x will be supported. This 
+  allows us to use new language-features like arrow functions and Promises (without using 3rd-party Promise libraries).
+
+## Relevant commits
+
+* [3e58da7](https://github.com/bootprint/bootprint/commit/3e58da7) Refactor dev-mode and dev-server - Nils Knappmeier
+* [475308f](https://github.com/bootprint/bootprint/commit/475308f) Change targetDir-parameter to be mandatory (not in options-object) - Nils Knappmeier
+* [4fe8ead](https://github.com/bootprint/bootprint/commit/4fe8ead) Change programmatic interface, remove default export - Nils Knappmeier
+* [4ee635f](https://github.com/bootprint/bootprint/commit/4ee635f) Change .travis.yml-configuration - Nils Knappmeier
+* [5eee441](https://github.com/bootprint/bootprint/commit/5eee441) One new test for 100% coverage... - Nils Knappmeier
+* [835d53c](https://github.com/bootprint/bootprint/commit/835d53c) Added tests to increase code coverage (reporting seems to be wrong, still) - Nils Knappmeier
+* [90074d6](https://github.com/bootprint/bootprint/commit/90074d6) Add tests and include sub-processes in coverage-report - Nils Knappmeier
+* [649eccc](https://github.com/bootprint/bootprint/commit/649eccc) Use custom fork of "nock" with hotfix for endless loop - Nils Knappmeier
+* [5959d1c](https://github.com/bootprint/bootprint/commit/5959d1c) Handle all errors from loader as CouldNotLoadInputError, fix loading bootprint-modules - Nils Knappmeier
+* [bbfbc62](https://github.com/bootprint/bootprint/commit/bbfbc62) Fix handling of errors for invalid input sources - Nils Knappmeier
+* [ea7d319](https://github.com/bootprint/bootprint/commit/ea7d319) BREAKING: Refactoring of the javascript-interface - Nils Knappmeier
+* [56b5ada](https://github.com/bootprint/bootprint/commit/56b5ada) Remove dependency on "q" and "m-io" - Nils Knappmeier
+* [7ca59e4](https://github.com/bootprint/bootprint/commit/7ca59e4) BREAKING: customize-engine-ugfliy removed - Nils Knappmeier
+* [c405941](https://github.com/bootprint/bootprint/commit/c405941) BREAKING: Drop support for node<6, a lot of chore - Nils Knappmeier
+* [d945423](https://github.com/bootprint/bootprint/commit/d945423) Add correct logo - Nils Knappmeier
+* [0c7c42f](https://github.com/bootprint/bootprint/commit/0c7c42f) Fix broken logo in README.md - Taylor Hicks
+
+
 # Version 1.0.1 (Fri, 23 Dec 2016 20:35:00 GMT)
 
 * [824bb17](https://github.com/bootprint/bootprint/commit/824bb17) Update documentation (bootprint-swagger is deprecated) - Nils Knappmeier
