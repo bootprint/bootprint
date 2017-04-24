@@ -57,7 +57,7 @@
     "dirty-chai": "^1.2.2",
     "ghooks": "^2.0.0",
     "m-io": "^0.5.0",
-    "mocha": "^3.2.0",
+    "mocha": "^3.3.0",
     "thoughtful-release": "^0.3.1"
   }
 }
