@@ -118,7 +118,7 @@ describe('The dev-mode interface', function () {
 })
 
 describe('The dev-mode cli option', function () {
-  this.timeout(5000)
+  this.timeout(10000)
   var child
   beforeEach(function () {
     return Promise.resolve()
@@ -147,7 +147,7 @@ describe('The dev-mode cli option', function () {
       .then(() => writeInput('input.json', JSON.stringify({
         'eins': 'un', 'zwei': 'deux', 'drei': 'trois'
       })))
-      .then(() => relax())
+      .then(() => relax(2000))
       .then(() => expect(readResult('index.html')).to.equal('eins=un zwei=deux drei=trois'))
   })
 })
