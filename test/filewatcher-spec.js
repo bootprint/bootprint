@@ -99,9 +99,9 @@ describe('The MultiWatcher', function () {
     })
 
     return relax()
-      .then(() => write(tmp('subdir1/a.txt')))
+      .then(() => add(tmp('subdir1/a.txt')))
       .then(() => relax())
-      .then(() => write(tmp('subdir2/b.txt')))
+      .then(() => add(tmp('subdir2/b.txt')))
       .then(() => relax())
       .then(() => expect(events).to.deep.equal([
         {
@@ -122,8 +122,8 @@ describe('The MultiWatcher', function () {
     })
 
     return relax()
-      .then(() => write(tmp('subdir2/b.txt')))
-      .then(() => write(tmp('subdir1/c.txt')))
+      .then(() => add(tmp('subdir2/b.txt')))
+      .then(() => add(tmp('subdir1/c.txt')))
       .then(() => relax())
       .then(() => removeTree(tmp('subdir2/b.txt')))
       .then(() => relax())
@@ -153,8 +153,8 @@ describe('The MultiWatcher', function () {
       .then(() => multiWatcher.watch({
         key1: [tmp('subdir1')]
       }))
-      .then(() => write(tmp('subdir2/b.txt')))
-      .then(() => write(tmp('subdir1/c.txt')))
+      .then(() => add(tmp('subdir2/b.txt')))
+      .then(() => add(tmp('subdir1/c.txt')))
       .then(() => relax())
       .then(() => removeTree(tmp('subdir2/b.txt')))
       .then(() => relax())
@@ -178,8 +178,8 @@ describe('The MultiWatcher', function () {
         key2: []
       }))
       .then(() => relax())
-      .then(() => write(tmp('subdir2/b.txt')))
-      .then(() => write(tmp('subdir1/c.txt')))
+      .then(() => add(tmp('subdir2/b.txt')))
+      .then(() => add(tmp('subdir1/c.txt')))
       .then(() => relax())
       .then(() => removeTree(tmp('subdir2/b.txt')))
       .then(() => relax())
@@ -204,9 +204,9 @@ describe('The MultiWatcher', function () {
       .then(() => multiWatcher.watch({key1: [tmp('subdir1/a.txt')]}))
       .then(() => relax())
       .then(() => removeTree(tmp('subdir1/a.txt')))
-      .then(() => write(tmp('subdir1/a.txt')))
+      .then(() => add(tmp('subdir1/a.txt')))
       .then(() => relax())
-      .then(() => write(tmp('subdir1/a.txt')))
+      .then(() => add(tmp('subdir1/a.txt')))
       .then(() => relax())
       .then(() => expect(events).to.deep.equal([
         // Only two events, because the remove and write are merged into one (chokidar "atomic"-writes)
