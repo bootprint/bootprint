@@ -53,7 +53,7 @@
     }
   },
   "devDependencies": {
-    "chai": "^3.4.0",
+    "chai": "^4.1.0",
     "dirty-chai": "^1.2.2",
     "ghooks": "^2.0.0",
     "m-io": "^0.5.0",
