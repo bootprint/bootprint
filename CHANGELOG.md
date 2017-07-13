@@ -1,6 +1,12 @@
 # Release notes
 
 <a name="current-release"></a>
+
+# Version 2.0.1 (Thu, 13 Jul 2017 19:26:05 GMT)
+
+* [4f3f48e](https://github.com/bootprint/bootprint/commit/4f3f48e) Fix "files"-section in "package.json" - Nils Knappmeier
+* [663e3c2](https://github.com/bootprint/bootprint/commit/663e3c2) Add "engine"-property (node >=6) to package.json... - Nils Knappmeier
+
 # Version 2.0.0 (Sun, 23 Apr 2017 14:47:57 GMT)
 
 ## Breaking changes
