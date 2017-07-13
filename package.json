@@ -47,7 +47,8 @@
   },
   "files": [
     "index.js",
-    "bin/bootprint.js"
+    "bin",
+    "lib"
   ],
   "devDependencies": {
     "bootprint-test-module": "file:test/fixtures/bootprint-test-module",
