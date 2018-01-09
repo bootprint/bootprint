@@ -41,7 +41,7 @@
     "live-server": "^1.2.0",
     "lodash": "^4.17.4",
     "q": "^1.4.1",
-    "trace-and-clarify-if-possible": "^1.0.0"
+    "trace-and-clarify-if-possible": "^1.0.3"
   },
   "files": [
     "index.js",
