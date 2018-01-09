@@ -1,6 +1,11 @@
 # Release notes
 
 <a name="current-release"></a>
+# Version 1.0.2 (Tue, 09 Jan 2018 21:47:03 GMT)
+
+* [eb2d03a](https://github.com/bootprint/bootprint/commit/eb2d03a) Removed lodash dependency (copied from #22 by @jimmywarting) - Nils Knappmeier
+* [2c87723](https://github.com/bootprint/bootprint/commit/2c87723) fix: bump `trace-and-clarify-if-possible` to 1.0.3 - Nils Knappmeier
+
 # Version 1.0.1 (Fri, 23 Dec 2016 20:35:00 GMT)
 
 * [824bb17](https://github.com/bootprint/bootprint/commit/824bb17) Update documentation (bootprint-swagger is deprecated) - Nils Knappmeier

@@ -1,11 +1,9 @@
 # bootprint 
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/bootprint/bootprint.svg)](https://greenkeeper.io/)
-
-[![NPM version](https://badge.fury.io/js/bootprint.svg)](http://badge.fury.io/js/bootprint)
+[![NPM version](https://img.shields.io/npm/v/bootprint.svg)](https://npmjs.com/package/bootprint)
 [![Travis Build Status](https://travis-ci.org/bootprint/bootprint.svg?branch=master)](https://travis-ci.org/bootprint/bootprint)
 [![Coverage Status](https://img.shields.io/coveralls/bootprint/bootprint.svg)](https://coveralls.io/r/bootprint/bootprint)
-
+[![Greenkeeper badge](https://badges.greenkeeper.io/bootprint/bootprint.svg)](https://greenkeeper.io/)
 
 > Converts json and yaml into a static html page using Handlebars and Bootstrap
 
@@ -62,15 +60,17 @@ as a base for other modules.
 
 
 
-## License
+# License
 
-`bootprint` is published under the MIT-license. 
+`bootprint` is published under the MIT-license.
+
 See [LICENSE](LICENSE) for details.
 
-## Release-Notes
+
+# Release-Notes
  
 For release notes, see [CHANGELOG.md](CHANGELOG.md)
  
-## Contributing guidelines
+# Contributing guidelines
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).

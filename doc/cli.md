@@ -20,13 +20,14 @@ Usage: bootprint [options] <module> <jsonFile> <targetdir>
 
   Converts json and yaml into a static html page using Handlebars and Bootstrap
 
+
   Options:
 
-    -h, --help                output usage information
     -V, --version             output the version number
-    -f, --config-file <file>  Specify a config file for custom configurations
+    -f, --config-file <file>  Specify a config file for custom configurations (default: [object Object])
     -d, --development-mode    Turn on file-watcher, less source maps and http-server with live-reload
     -l, --long-stack          Turn on long and clarified stack-traces. Requires Node 4 or newer
+    -h, --help                output usage information
 ``` 
 
 * The **&lt;spec>** consists of the name of a globally installed template-module optionally without the `bootprint-` prefix.
